@@ -10,18 +10,34 @@
         <!-- GCHARTS INIT -->
         <script type="text/javascript">google.load('visualization', '1.1', {packages: ['corechart', 'controls']});</script>
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
-        <script type="text/javascript">google.setOnLoadCallback(drawVisualization);</script>
         <!-- GCHARTS END -->
     </head>
     <body>
-        <div id="dashboard" class="span12 hero-unit">
-            <div style="width: 915px; margin: auto;">
+        <button class="btn">Chartttttt</button>
+        <!-- 
+        <div id="dashboard1" class="span12 hero-unit">
+            <div style="width: 915px; margin: auto; display: none;" class="graph">
                 <div id="chart1" style='width: 1000px; height: 300px;'></div>
                 <div id="control1" style='width: 1000px; height: 50px;'></div>
             </div>
-            <div style="width: 915px; margin: auto;">
+        </div>
+        <div id="dashboard2" class="span12 hero-unit">
+            <div style="width: 915px; margin: auto; display: none;" class="graph">
                 <div id="chart2" style='width: 1000px; height: 300px;'></div>
                 <div id="control2" style='width: 1000px; height: 50px;'></div>
+            </div>
+        </div>
+        <div id="dashboard3" class="span12 hero-unit">
+            <div style="width: 915px; margin: auto; display: none;" class="graph">
+                <div id="chart3" style='width: 1000px; height: 300px;'></div>
+                <div id="control3" style='width: 1000px; height: 50px;'></div>
+            </div>
+        </div>
+    -->
+        <div id="dashboard4" class="span12 hero-unit">
+            <div style="width: 915px; margin: auto; display: none;" class="graph">
+                <div id="chart4" style='width: 1000px; height: 300px;'></div>
+                <!-- <div id="control2" style='width: 1000px; height: 50px;'></div> -->
             </div>
         </div>
     </body>

@@ -10,19 +10,6 @@ function classLoader ($pClassName) {
 spl_autoload_register("classLoader");
 
 $client_data = array(
-    'graphs' => array(
-            'line',
-        ),
-    'ids' => array(
-            '1',
-        ),
-    //'client_field' => 'tkt',
-    'client_field' => 'gds',
-    'client_field_value' => 'RN',
-    'client_limit' => '',
-);
-
-$client_data = array(
     0 => array(
         'graph'         => 'line',
         'id'            => 1,
@@ -32,15 +19,47 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'         => '',
     ),
-    //*
     1 => array(
         'graph'     => 'line',
         'id'        => 2,
+        'dimension' => 'gds',
+        'value'     => '',
+        'value_sabre'   => 'LB',
+        'value_amadeus' => 'LB',
+        'limit'     => '10',
+    ),
+    3 => array(
+        'graph'     => 'line',
+        'id'        => 3,
         'dimension' => 'tkt',
         'value'     => '',
+        'value_sabre'   => 'LB',
+        'value_amadeus' => 'LB',
         'limit'     => '',
     ),
+    /*
+    4 => array(
+        'graph'     => 'pie',
+        'id'        => 2,
+        'dimension' => 'gds',
+        'value'     => '',
+        'value_sabre'   => 'LB',
+        'value_amadeus' => 'LB',
+        'limit'     => '10',
+    ),    
     //*/
+);
+
+$client_data = array(
+    0 => array(
+        'graph'     => 'pie',
+        'id'        => 4,
+        'dimension' => 'sine',
+        'value'     => '',
+        'value_sabre'   => 'LB',
+        'value_amadeus' => 'LB',
+        'limit'     => '10',
+    ),
 );
 
 $dataGetter = new DataHandler($client_data);
