@@ -14,7 +14,6 @@
     </head>
     <body>
         <button class="btn">Chartttttt</button>
-        <!-- 
         <div id="dashboard1" class="span12 hero-unit">
             <div style="width: 915px; margin: auto; display: none;" class="graph">
                 <div id="chart1" style='width: 1000px; height: 300px;'></div>
@@ -33,12 +32,11 @@
                 <div id="control3" style='width: 1000px; height: 50px;'></div>
             </div>
         </div>
-    -->
-        <div id="dashboard4" class="span12 hero-unit">
-            <div style="width: 915px; margin: auto; display: none;" class="graph">
-                <div id="chart4" style='width: 1000px; height: 300px;'></div>
-                <!-- <div id="control2" style='width: 1000px; height: 50px;'></div> -->
-            </div>
+        <div class="graph span6" style="width: 600px; height: 400px;">
+            <div id="piecolchart4"></div>
         </div>
+        <div class="graph span6" style="width: 600px; height: 400px;">
+            <div id="piecolchart5"></div>
+        </div>        
     </body>
 </html>

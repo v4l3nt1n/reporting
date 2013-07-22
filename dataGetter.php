@@ -37,29 +37,26 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'     => '',
     ),
-    /*
+    //*
     4 => array(
         'graph'     => 'pie',
-        'id'        => 2,
-        'dimension' => 'gds',
+        'id'        => 4,
+        'dimension' => 'descripcion',
         'value'     => '',
         'value_sabre'   => 'LB',
         'value_amadeus' => 'LB',
-        'limit'     => '10',
-    ),    
-    //*/
-);
-
-$client_data = array(
-    0 => array(
-        'graph'     => 'pie',
-        'id'        => 4,
+        'limit'     => '',
+    ),
+    5 => array(
+        'graph'     => 'col',
+        'id'        => 5,
         'dimension' => 'sine',
         'value'     => '',
         'value_sabre'   => 'LB',
         'value_amadeus' => 'LB',
-        'limit'     => '10',
+        'limit'     => '20',
     ),
+    //*/
 );
 
 $dataGetter = new DataHandler($client_data);

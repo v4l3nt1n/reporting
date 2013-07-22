@@ -3,6 +3,10 @@
 class DataHandler
 {
     //propiedades
+    const INDICATOR_COLUMN_GRAPH = 'col';
+    const INDICATOR_PIE_GRAPH = 'pie';
+    const INDICATOR_LINE_GRAPH = 'line';
+
     private $client_obj;
 
     private $query_results = array();
@@ -36,15 +40,12 @@ class DataHandler
             $this->actual_obj_dim = $obj['dimension'];
             $this->actual_obj_lim = $obj['limit'];
 
-            if ($obj['graph'] == "column") {
-                $this->fetchColumnChart();
+            if ($obj['graph'] == DataHandler::INDICATOR_COLUMN_GRAPH ||
+                $obj['graph'] == DataHandler::INDICATOR_PIE_GRAPH) {
+                $this->fetchPieColChart();
             }
 
-            if ($obj['graph'] == "pie") {
-                $this->fetchPieChart();
-            }
-
-            if ($obj['graph'] == "line") {
+            if ($obj['graph'] == DataHandler::INDICATOR_LINE_GRAPH) {
                 $this->fetchLineChart();
             }
         }
@@ -76,9 +77,10 @@ class DataHandler
         day,
         month,
         year
-        FROM tkts_sabre ";
+        FROM tkts_sabre 
+        WHERE descripcion != 'VOID' ";
         if ($this->actual_obj_dim == 'sine') {
-            $sql .= "WHERE sine =:sine ";
+            $sql .= "AND sine =:sine ";
             $sine_token = $this->client_obj[$this->actual_obj_key]['value_sabre'];
         }
         $sql .= "GROUP BY fecha
@@ -110,9 +112,11 @@ class DataHandler
         day,
         month,
         year
-        FROM tkts_amadeus ";
+        FROM tkts_amadeus 
+        WHERE descripcion != 'CANX' 
+        AND descripcion != 'CANN' ";
         if ($this->actual_obj_dim == 'sine') {
-            $sql .= "WHERE sine =:sine ";
+            $sql .= "AND sine =:sine ";
             $sine_token = $this->client_obj[$this->actual_obj_key]['value_amadeus'];
         }        
         $sql .= "GROUP BY fecha
@@ -245,53 +249,88 @@ class DataHandler
         return $graphData;
     }
 
-    private function fetchPieChart()
+    private function fetchPieColChart()
     {
-        $this->graphDataObjects[] = $this->pieChartProcess();
+        $this->graphDataObjects[] = $this->pieColProcess();
     }
 
-    private function pieChartProcess()
+    private function pieColProcess()
     {
-        //$fetchPie = array();
+        $fetchSabre = array();
+        $fetchAmadeus = array();
+        $fetchPieCol = array();
+        $sine_token = '';
         $i = 0;
 
         $sql = "SELECT
             ".$this->actual_obj_dim." AS dimension,
             COUNT(*) AS count
             FROM tkts_sabre
-            GROUP BY dimension
+            WHERE descripcion != 'VOID' ";
+            $sql .= "GROUP BY dimension
             HAVING count > 1
-            ORDER BY count DESC
-            LIMIT 0 , 10";
+            ORDER BY count DESC ";
+            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
+                $sql .= "LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
+            }
 
         try{
-            //$this->db->beginTransaction();
             $stmt = $this->db->prepare($sql);
-            $stmt->execute(array(':dimension' => $this->actual_obj_dim));
-            //$this->db->commit();
+            $stmt->execute(array(':sine' => $sine_token));
             
             while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $fetchPie[$i] = $data;
+                $fetchSabre[$i] = $data;
                 $i++;
             }
-            
-
         } catch(Exception $e) {
-            //$this->db->rollBack();
             echo($e->getMessage());
         }
 
-        $graphData['data'] = $fetchPie;
+        $sql = "SELECT
+            ".$this->actual_obj_dim." AS dimension,
+            COUNT(DISTINCT tkt) AS count
+            FROM tkts_amadeus
+            WHERE descripcion != 'CANX' 
+            AND descripcion != 'CANN' ";
+            $sql .= "GROUP BY dimension
+            HAVING count > 1
+            ORDER BY count DESC ";
+            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
+                $sql .= "LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
+            }
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(array(':sine' => $sine_token));
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $fetchAmadeus[$i] = $data;
+                $i++;
+            }
+        } catch(Exception $e) {
+            echo($e->getMessage());
+        }
+
+        if ($this->actual_obj_dim == 'descripcion') {
+            $fetchPieCol = array_merge($fetchSabre,$fetchAmadeus);
+        } else {
+            foreach ($fetchSabre as $key => $dataSb) {
+                foreach ($fetchAmadeus as $key => $dataAm) {
+                    if ($dataSb['dimension'] == $dataAm['dimension']) {
+                        $fetchPieCol[] = array(
+                            'dimension' => $dataSb['dimension'],
+                            'count'     => $dataSb['count'] + $dataAm['count'],
+                        );
+                    }
+                }
+            }    
+        }
+
+        $graphData['data'] = $fetchPieCol;
         $graphData['dimension'] = $this->actual_obj_dim;
-        $graphData['graph'] = 'PieChart';
+        $graphData['graph'] = ($this->client_obj[$this->actual_obj_key]['graph'] == 'pie') ? 'PieChart' : 'ColumnChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
         
         return $graphData;
-        /*
-        echo "<pre>";
-        print_r($fetchPie);
-        echo "</pre>";
-        die();
-        //*/
     }
 }

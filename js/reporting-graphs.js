@@ -25,8 +25,10 @@ $(document).ready(function () {
                         dashBoards[i].bind(graphObject.control,graphObject.chart);
                         dashBoards[i].draw(dataTables[i]);
                     }
-                    if (data[i].graph == 'PieChart') {
-                        // ABANDONADO ACA //
+                    if (data[i].graph == 'PieChart' ||
+                        data[i].graph == 'ColumnChart'
+                        ) {
+                        graphObject.chart.draw(graphObject.table,{title: "PieChart"});
                     }
                 }
                 dashBoards = [];
@@ -37,15 +39,11 @@ $(document).ready(function () {
     }
 
     function drawVisualization(data) {
-
         if (data.graph == 'LineChart') {
             return prepareLineChart(data);
         }
-        if (data.graph == 'PieChart') {
-            return preparePieChart(data);
-        }
-        if (data.graph == 'ColumnChart') {
-            prepareLineChart(data);
+        if (data.graph == 'PieChart' || data.graph == 'ColumnChart') {
+            return preparePieColChart(data);
         }
     }
        
@@ -184,44 +182,29 @@ $(document).ready(function () {
         return graphObject;
     }
 
-    function preparePieChart(data){
-        var dId = 'piechart' + data.id.toString();
-        var piechart = new google.visualization.PieChart(document.getElementById(dId));
+    function preparePieColChart(data){
+        var dId = 'piecolchart' + data.id.toString();
+        if (data.graph == 'PieChart') {
+            var chart = new google.visualization.PieChart(document.getElementById(dId));
+        }
+        
+        if (data.graph == 'ColumnChart') {
+            var chart = new google.visualization.ColumnChart(document.getElementById(dId));
+        }
 
         var arrayData = new Array;
         arrayData.push([data.dimension.toString(), 'Emisiones']);
 
         for (var i = 0; i < data.data.length; i++) {
-            arrayData.push([data.data[i].dimension,data.data[i].count]);
+            arrayData.push([data.data[i].dimension,parseInt(data.data[i].count)]);
         }
 
-        var dataTbl = google.visualization.arrayToDataTable([arrayData]);
-
-        var chart = new google.visualization.ChartWrapper({
-            'chartType': 'PieChart',
-            'containerId': 'chart1',
-            'options': {
-                'width': 300,
-                'height': 300,
-                'legend': 'none',
-                'title': 'Donuts eaten per person',
-                'chartArea': {'left': 15, 'top': 15, 'right': 0, 'bottom': 0},
-                'pieSliceText': 'label'
-            },
-            // Instruct the piechart to use colums 0 (Name) and 3 (Donuts Eaten)
-            // from the 'data' DataTable.
-            // 'view': {'columns': [0, 3]}
-        });
-
-        chart.setContainerId('chart' + data.id.toString());
+        var dataTbl = google.visualization.arrayToDataTable(arrayData);
 
         var graphObject = {};
-        graphObject.chart = piechart;
+        graphObject.chart = chart;
         graphObject.table = dataTbl;
-/*
-        dashBoards.push(dashboard);
-        dataTables.push(dataTbl);
-*/
+
         return graphObject;
     }
 });
