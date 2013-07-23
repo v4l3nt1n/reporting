@@ -37,7 +37,6 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'     => '',
     ),
-    //*
     4 => array(
         'graph'     => 'pie',
         'id'        => 4,
@@ -47,6 +46,7 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'     => '',
     ),
+    //*
     5 => array(
         'graph'     => 'col',
         'id'        => 5,
@@ -59,4 +59,4 @@ $client_data = array(
     //*/
 );
 
-$dataGetter = new DataHandler($client_data);
+$graphObjects = new DataHandler($client_data);
