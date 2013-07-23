@@ -38,6 +38,6 @@
         </div>
         <div class="graph span6" style="width: 600px; height: 400px;">
             <div id="piecolchart5"></div>
-        </div>        
+        </div>
     </body>
 </html>
