@@ -3,10 +3,11 @@
     <head>
         <title>Tucano Reporting v1.0</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="//api.tucanotours.com.ar/bs/css/tucano.bs.css" rel="stylesheet">
+        <link href="//api.tucanotours.com.ar/bs/css/todc.bs.css" rel="stylesheet">
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="//api.tucanotours.com.ar/bs/js/bootstrap.min.js"></script>
         <!-- GCHARTS INIT -->
         <script type="text/javascript">google.load('visualization', '1.1', {packages: ['corechart', 'controls']});</script>
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
