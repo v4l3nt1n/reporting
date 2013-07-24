@@ -9,7 +9,14 @@ include 'Classes/PHPExcel/IOFactory.php';
 
 set_include_path(get_include_path() . PATH_SEPARATOR . 'Classes/');
 
-$source_handler = new SourceHandler($_FILES);
-$fuentes = $source_handler->getSources();
+$error = '';
+
+try {
+	$source_handler = new SourceHandler($_FILES);
+	$fuentes = $source_handler->getSources();
+	$error = "Los archivos se subieron con exito.";
+} catch (Exception $e) {
+	$error = $e->getMessage();
+}
 
 unset($source_handler);

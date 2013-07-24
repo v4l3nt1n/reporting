@@ -5,24 +5,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <html>
 <head>
-    <title>Prueba subida de reportes de venta para graficos</title>
-    <link href="http://api.tucanotours.com.ar/bs/css/tucano.bs.css" rel="stylesheet" type="text/css" media="screen" />
-    <link href="css/coef-admin.css" rel="stylesheet">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.js"></script>
-    <script type="text/javascript" src="http://api.tucanotours.com.ar/bs/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/tktcompare.js"></script>
-    <style type="text/css">
-    table td {
-        font-size: 10px;
-        font-weight: bold;
-    }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tucano Tours - Carga de Reportes</title>
+    <link rel="shortcut icon" href="img/tucano.ico" type="image/x-icon" />
+    <link href="carga_reportes.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <form method="post" action="" enctype="multipart/form-data">
-        <input name="files[]" id="file" type="file" multiple=""/>
-        <input type="submit" value="go!!!" >
-    </form>
+    <div id="wrapper">
+        <div id="content">
+            <div id="head">
+                <div id="nombre-herr"><img alt="Herramienta de Carga de Reportes" src="img/carga.png" /></div>
+                <div id="logos">
+                    <a href="http://tucanotours.com.ar" target="_blank"><img id="tucano" alt="Tucano Tours" src="img/tucano-tours.png" width="187"/></a>
+                    <a href="http://sci.tucanotours.com.ar" target="_blank"><img id="sci" alt="Sistema de Consolidación Integrada" src="img/sci.png" width="250"/></a>
+                </div>
+            </div>
+            <img alt="" src="img/line_red.png" />
+            <?php
+                if ($error) {
+                    echo '<div id="buscar" align="center" class="verda" style="color: #ed2d2d;">';
+                    echo $error;
+                    echo '</div>';
+                }
+            ?>
+            <form id="buscar" method="post" action="" enctype="multipart/form-data">
+                <input name="files[]" id="files" type="file" multiple="" />
+                <input type="submit" value="Subir" class="btn primary" >
+            </form>
+        </div>
+    </div>
 </body>
-
 </html>

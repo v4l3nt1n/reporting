@@ -17,6 +17,11 @@ class SourceHandler
 
     const TICKET_COL_SABRE = 'TICKET';
 
+    private $dbname = 'tucanoto_reservas';
+    private $host = 'localhost';
+    private $db_user = 'root';
+    private $db_psw = '';
+
     private $files_array = array();
 
     private $ready_array_sabre = array();
@@ -140,10 +145,10 @@ class SourceHandler
 
             if (strpos($name, SourceHandler::SOURCE_SABRE) !== FALSE) {
                 $this->csvToArray($inputFileName);
-            }
-
-            if (strpos($name, SourceHandler::SOURCE_AMADEUS) !== FALSE) {
+            } elseif (strpos($name, SourceHandler::SOURCE_AMADEUS) !== FALSE) {
                 $this->xlsToArray($inputFileName, SourceHandler::SOURCE_AMADEUS);
+            } else {
+                throw new Exception("Uno de los archivos contiene un nombre invalido", 1);
             }
         }
     }
@@ -317,10 +322,19 @@ class SourceHandler
 
     private function DBHandler()
     {
-        $this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
+        //$this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
+
+        $this->db = new PDO(
+            'mysql:host=' . $this->host . ';
+             dbname=' . $this->dbname,
+             $this->db_user,
+             $this->db_psw
+        );
+
         //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
+
 
     private function insertIntoDB()
     {
