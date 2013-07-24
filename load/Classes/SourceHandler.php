@@ -169,9 +169,11 @@ class SourceHandler
         // quito los tickets en conjuncion
         $this->ticket_col = SourceHandler::TICKET_COL_SABRE;
         $this->ready_array_sabre = array_map(array($this,'dismissCnjTkts'), $this->ready_array_sabre);
+        // normailizo datos como reemision
+        $this->sabreDataNormalize();
         // inserto los datos en la base
         $this->insert_source = SourceHandler::SOURCE_SABRE;
-        $this->insertIntoDB();                
+        $this->insertIntoDB();
     }
 
     private function processAmadeus()
@@ -235,6 +237,34 @@ class SourceHandler
     {
         $elem[$this->ticket_col] = substr($elem[$this->ticket_col], 0, 10);
         return $elem;
+    }
+
+    private function sabreDataNormalize()
+    {
+        foreach ($this->ready_array_sabre as $key => $ticket) {
+/*
+            if (
+                strpos($ticket['DESCRIPCION'], 'ADDITIONAL') !== FALSE ||
+                strpos($ticket['DESCRIPCION'], 'EVEN EXCH') !== FALSE 
+               )
+            {
+                echo "<pre>";
+                print_r($ticket);
+                echo "</pre>";
+                die();
+            } else {
+                
+                echo "<pre>";
+                print_r($ticket);
+                echo "</pre>";
+                die();
+                
+            }
+*/
+            var_dump(strpos($ticket['DESCRIPCION'], 'ADDITIONAL'));
+        }
+
+        die();
     }
 
     private function rowCleaner()
