@@ -253,23 +253,25 @@ class SourceHandler
                 echo "</pre>";
                 die();
             } else {
-                
                 echo "<pre>";
                 print_r($ticket);
                 echo "</pre>";
                 die();
-                
             }
-*/
+//*/
+
             var_dump(strpos($ticket['DESCRIPCION'], 'ADDITIONAL'));
         }
 
+        echo "<pre>";
+        print_r($this->ready_array_sabre);
+        echo "</pre>";
         die();
     }
 
     private function rowCleaner()
     {
-        if ($this->cleaner_source == SourceHandler::SOURCE_SABRE) {            
+        if ($this->cleaner_source == SourceHandler::SOURCE_SABRE) {
             foreach ($this->ready_array_sabre as $key => $ticket) {
                 if ($ticket[SourceHandler::FILTER_COL_SABRE] == 'FECHA') {
                     unset($this->ready_array_sabre[$key]);
@@ -375,8 +377,8 @@ class SourceHandler
                                                                    :ruta,:clase,:tourcode,:moneda,:facial,:impuestos,
                                                                    :comision,:total,:monto_cash,:monto_tarjeta,:fop,
                                                                    :garantia,:fop_detalle,:cuotas,:endoso,:fecha_1ervuelo,
-                                                                   :fecha_ultimovuelo,:base_tarifa,:sine,:hora,:pcc,:descripcion,
-                                                                   :corte_tarifario1,:day,:month,:year,:gds)");
+                                                                   :fecha_ultimovuelo,:base_tarifa,:sine,:hora,:descripcion,
+                                                                   :corte_tarifario1,:pcc,:day,:month,:year,:gds)");
             try{
                 $this->db->beginTransaction();
 
