@@ -17,11 +17,10 @@
         <!-- GCHARTS END -->
     </head>
     <body>
-
-        <div class="container">
-            <div id="header" class="shadow_inset">
-                HOlña
-            </div>
+        <div id="header">
+                <p align="center">HEADER</p>
+        </div>
+        <div class="wrapper">
             <button id="chart" class="btn">Chartttttt</button>
             <div id="dashboard1" class="span12 dashboard">
                 <div class="btn-group">
