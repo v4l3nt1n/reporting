@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     //initGraphs();
 
-    $('button').on('click', function(){
+    $('#chart').on('click', function(){
         $('.graph').fadeOut();
         initGraphs();
     });
