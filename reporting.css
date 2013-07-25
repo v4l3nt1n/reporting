@@ -24,8 +24,9 @@ body {
 	border: 0px;
 }
 
-.wrapper {
+#wrapper {
 	width: 940px;
+	height: 100%;
 	clear: both;
 	margin-left: auto;
 	margin-right: auto;
@@ -69,7 +70,18 @@ body {
 	float: left;
 }
 
+.drag {
+	margin-top: 2px;
+	margin-right: 4px;
+	float: right;
+}
+
+.drag:hover {
+	cursor: pointer;
+}
+
 input[type="text"] {
 	border: 1px solid #515151 !important;
 }
+
 

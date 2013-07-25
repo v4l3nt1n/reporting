@@ -7,10 +7,17 @@
         <link href="reporting.css" rel="stylesheet">
         <link href="//api.tucanotours.com.ar/bs/css/tucano.bs.css" rel="stylesheet">
         <link href="//api.tucanotours.com.ar/bs/css/todc.bs.css" rel="stylesheet">
+        <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
         <link rel="shortcut icon" href="img/tucano.ico" type="image/x-icon" />
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script src="//api.tucanotours.com.ar/bs/js/bootstrap.min.js"></script>
+        <script>
+            $(function() {
+                $( ".draggable" ).draggable();
+            });
+        </script>
         <!-- GCHARTS INIT -->
         <script type="text/javascript">google.load('visualization', '1.1', {packages: ['corechart', 'controls']});</script>
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
@@ -24,9 +31,9 @@
                 <img alt="Herramienta de Reporting" src="img/reporting.png"/>
             </div>
         </div>
-        <div class="wrapper">
+        <div id="wrapper">
             <button id="chart" class="btn">Chartttttt</button>
-            <div id="dashboard1" class="span12 dashboard">
+            <div id="dashboard1" class="span12 dashboard draggable">
                 <div class="btn-group">
                     <button class="btn btn-inverse">Tipo de gráfico</button>
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -43,13 +50,16 @@
                 </div>
                 <div class="graficar">
                     <button class="btn btn-inverse">Graficar</button>
+                </div>
+                <div class="drag">
+                    <i class="icon-move" title="Arrastrar gráfico"></i>
                 </div>
                 <div class="graph">
                     <div id="chart1" class="line"></div>
                     <div id="control1" class="line_small"></div>
                 </div>
-            </div>
-            <div id="dashboard2" class="span12 dashboard">
+            </div><!--dashboard1-->
+            <div id="dashboard2" class="span12 dashboard draggable">
                 <div class="btn-group">
                     <button class="btn btn-inverse">Tipo de gráfico</button>
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -66,13 +76,16 @@
                 </div>
                 <div class="graficar">
                     <button class="btn btn-inverse">Graficar</button>
+                </div>
+                <div class="drag">
+                    <i class="icon-move" title="Arrastrar gráfico"></i>
                 </div>
                 <div class="graph">
                     <div id="chart2" class="line"></div>
                     <div id="control2" class="line_small"></div>
                 </div>
-            </div>
-            <div id="dashboard3" class="span12 dashboard">
+            </div><!--dashboard2-->
+            <div id="dashboard3" class="span12 dashboard draggable">
                 <div class="btn-group">
                     <button class="btn btn-inverse">Tipo de gráfico</button>
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -90,13 +103,16 @@
                 <div class="graficar">
                     <button class="btn btn-inverse">Graficar</button>
                 </div>
+                <div class="drag">
+                    <i class="icon-move" title="Arrastrar gráfico"></i>
+                </div>
                 <div class="graph">
                     <div id="chart3" class="line"></div>
                     <div id="control3" class="line_small"></div>
                 </div>
-            </div>
+            </div><!--dashboard3-->
             <div class="row-fluid">
-                <div id="dashboard4" class="span6 dashboard">
+                <div id="dashboard4" class="span6 dashboard draggable">
                     <div class="btn-group">
                         <button class="btn btn-inverse">Tipo de gráfico</button>
                         <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -110,12 +126,15 @@
                     </div>
                     <div class="graficar">
                         <button class="btn btn-inverse">Graficar</button>
+                    </div>
+                    <div class="drag">
+                        <i class="icon-move" title="Arrastrar gráfico"></i>
                     </div>
                     <div>
                         <div id="piecolchart4" class="pie"></div>
                     </div>
-                </div>
-                <div id="dashboard5" class="span6 dashboard">
+                </div><!--dashboard4-->
+                <div id="dashboard5" class="span6 dashboard draggable">
                     <div class="btn-group">
                         <button class="btn btn-inverse">Tipo de gráfico</button>
                         <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -130,11 +149,14 @@
                     <div class="graficar">
                         <button class="btn btn-inverse">Graficar</button>
                     </div>
+                    <div class="drag">
+                        <i class="icon-move" title="Arrastrar gráfico"></i>
+                    </div>
                     <div>
                         <div id="piecolchart5" class="pie"></div>
                     </div>
-                </div>
-            </div>
-        </div><!--container-->
+                </div><!--dashboard5-->
+            </div><!--row-fluid-->
+        </div><!--wrapper-->
     </body>
 </html>
