@@ -14,6 +14,15 @@ body {
 	border-bottom: 1px solid #ffffff;
 }
 
+#logos {
+	width: 952px;
+	margin: auto;
+}
+
+#logos img {
+	border: 0px;
+}
+
 .wrapper {
 	width: 940px;
 	clear: both;
@@ -61,18 +70,5 @@ body {
 
 input[type="text"] {
 	border: 1px solid #515151 !important;
-	color: #515151;
-
 }
 
-
-
-.shadow_inset{
-	-webkit-box-shadow:inset 0 4px 58px rgba(0, 0, 0, 0.25),0 2px 2px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow:inset 0 4px 58px rgba(0, 0, 0, 0.25),0 2px 2px rgba(0, 0, 0, 0.05);
-	box-shadow:inset 0 4px 58px rgba(0, 0, 0, 0.25),0 2px 2px rgba(0, 0, 0, 0.05);
-	text-shadow:#666 1px;	
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;	
-}

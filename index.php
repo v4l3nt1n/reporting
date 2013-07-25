@@ -18,7 +18,11 @@
     </head>
     <body>
         <div id="header">
-                <p align="center">HEADER</p>
+            <div id="logos">
+                <img alt="Tucano Tours SRL" src="img/tucano-tours.png"/>
+                <img alt="Sistema de Consolidación Integrada" src="img/sci.png"/>
+                <img alt="Herramienta de Reporting" src="img/reporting.png"/>
+            </div>
         </div>
         <div class="wrapper">
             <button id="chart" class="btn">Chartttttt</button>
