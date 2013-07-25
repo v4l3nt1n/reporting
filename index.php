@@ -19,8 +19,8 @@
     <body>
         <div id="header">
             <div id="logos">
-                <img alt="Tucano Tours SRL" src="img/tucano-tours.png"/>
-                <img alt="Sistema de Consolidación Integrada" src="img/sci.png"/>
+                <a href="http://www.tucanotours.com.ar" target="_blank"><img alt="Tucano Tours SRL" src="img/tucano-tours.png"/></a>
+                <a href="http://sci.tucanotours.com.ar" target="_blank"><img alt="Sistema de Consolidación Integrada" src="img/sci.png"/></a>
                 <img alt="Herramienta de Reporting" src="img/reporting.png"/>
             </div>
         </div>
