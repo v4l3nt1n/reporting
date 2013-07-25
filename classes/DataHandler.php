@@ -7,6 +7,11 @@ class DataHandler
     const INDICATOR_PIE_GRAPH = 'pie';
     const INDICATOR_LINE_GRAPH = 'line';
 
+    private $dbname = 'tucanoto_air';
+    private $host = 'localhost';
+    private $db_user = 'root';
+    private $db_psw = '';
+
     private $client_obj;
 
     private $query_results = array();
@@ -53,7 +58,15 @@ class DataHandler
     
     private function DBHandler()
     {
-        $this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
+        //$this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
+
+        $this->db = new PDO(
+            'mysql:host=' . $this->host . ';
+             dbname=' . $this->dbname,
+             $this->db_user,
+             $this->db_psw
+        );
+
         //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -330,7 +343,7 @@ class DataHandler
         $graphData['dimension'] = $this->actual_obj_dim;
         $graphData['graph'] = ($this->client_obj[$this->actual_obj_key]['graph'] == 'pie') ? 'PieChart' : 'ColumnChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
-        
+
         return $graphData;
     }
 }
