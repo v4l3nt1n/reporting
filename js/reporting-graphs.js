@@ -1,13 +1,21 @@
+google.load('visualization', '1.1', {
+    packages: ['corechart', 'controls']
+});
+
 $(document).ready(function () {
-
-    var dashBoards = new Array;
-    var dataTables = new Array;
-
-    //initGraphs();
-
+    var dashBoards = [];
+    var dataTables = [];
+    
+    initGraphs();
+    $( ".draggable" ).draggable();
+    
     $('#chart').on('click', function(){
         $('.graph').fadeOut();
         initGraphs();
+    });
+
+    $('.draw').on('click', function(){
+        alert('metele');
     });
 
     function initGraphs () {
@@ -19,8 +27,9 @@ $(document).ready(function () {
             dataType: "json",
             success: function(data){
                 var l = data.length;
+                var graphObject;
                 for(var i = 0; i < l; i++){
-                    var graphObject = drawVisualization(data[i],i);
+                    graphObject = drawVisualization(data[i],i);
                     if (data[i].graph == 'LineChart') {
                         dashBoards[i].bind(graphObject.control,graphObject.chart);
                         dashBoards[i].draw(dataTables[i]);
