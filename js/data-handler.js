@@ -4,6 +4,7 @@ $(document).ready(function () {
     var clientGraph     = {};
     var that, txt, objdata, value_sabre, value_amadeus;
 
+    // Esta funcion asigna el valor elegido al boton correspondiente
     $('.dropdown-menu li a').on('click', function(){
         clientDashboard = $(this).parent().parent().parent().parent();
         fieldContainer = $(this).parent().parent().parent();
@@ -23,7 +24,7 @@ $(document).ready(function () {
         }
     });
 
-/*
+    // Recolecta los datos de los botones y arma el objeto clientObject para enviar al server
     $('.graficar').on('click', function(){
         clientObject.graph         = clientDashboard.find('.type').attr('objdata');
         clientObject.id            = clientDashboard.attr('id').slice(-1);
@@ -31,12 +32,8 @@ $(document).ready(function () {
         clientObject.value         = clientDashboard.find('.value').attr('objdata');
         clientObject.value_amadeus = clientDashboard.find('.value_amadeus').attr('objdata');
         clientObject.value_sabre   = clientDashboard.find('.value_sabre').attr('objdata');
-        clientObject.limit         = clientDashboard.find('.limit').attr('objdata');
+        clientObject.limit         = clientDashboard.find('.limit').val();
 
-
-        that = $(this);
+        console.log(clientObject);
     });
-*/
-
-
 });
