@@ -161,7 +161,7 @@
             <!--dashboard2-->
             <div id="dashboard2" class="span12 dashboard draggable">
                 <div class="btn-group">
-                    <button class="btn btn-inverse">Tipo de gráfico</button>
+                    <button class="btn btn-inverse">Dimensión</button>
                     <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                     </button>
