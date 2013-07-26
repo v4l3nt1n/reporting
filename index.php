@@ -79,7 +79,7 @@
                             <li><a objdata="sine">Agente</a></li>
                         </ul>
                     </div>
-                    <input objdata="text" class="input-mini limit" placeholder="limite">
+                    <input type="text" class="input-mini limit" placeholder="limite">
                     <div class="btn-group">
                         <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
                         <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
