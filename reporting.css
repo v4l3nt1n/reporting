@@ -51,7 +51,7 @@ body {
 
 .pie {
 	width: 425px; 
-	margin-top: 50px;
+	margin-top: 60px;
 	margin-bottom: 15px;
 	margin-left: auto;
 	margin-right: auto;
@@ -63,15 +63,39 @@ body {
 	background-color: #ffffff;
 }
 
-.btn-group, .graficar, .criterio {
+.row1 {
+	width: 425px;
+	float: left;
+	height: 25px;
+}
+
+.row2 {
+	width: 400px;
+}
+
+.btn-group, .criterio, .limite {
 	margin-top: 8px;
 	margin-left: 8px;
 	margin-bottom: 8px;
 	float: left;
 }
 
+.dimension {
+	margin-left: 10px;
+}
+
+.graficar {
+	float: right;
+}
+
 .drag {
-	margin-top: 2px;
+	margin-top: 4px;
+	margin-right: 4px;
+	float: right;
+}
+
+.graficar {
+	margin-top: 7px;
 	margin-right: 4px;
 	float: right;
 }
