@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    var clientObject    = {};
     var clientDashboard = {};
+    var clientObject    = {};
     var clientGraph     = {};
     var that, txt, objdata, value_sabre, value_amadeus;
 
@@ -22,18 +22,59 @@ $(document).ready(function () {
         } else {
             fieldContainer.children('.btn:first').attr('objdata',objdata).html(txt);
         }
+        //clientDashboard = {};
+        clientObject    = {};
     });
 
     // Recolecta los datos de los botones y arma el objeto clientObject para enviar al server
     $('.graficar').on('click', function(){
-        clientObject.graph         = clientDashboard.find('.type').attr('objdata');
-        clientObject.id            = clientDashboard.attr('id').slice(-1);
-        clientObject.dimension     = clientDashboard.find('.campo').attr('objdata');
-        clientObject.value         = clientDashboard.find('.value').attr('objdata');
-        clientObject.value_amadeus = clientDashboard.find('.value_amadeus').attr('objdata');
-        clientObject.value_sabre   = clientDashboard.find('.value_sabre').attr('objdata');
-        clientObject.limit         = clientDashboard.find('.limit').val();
+        try {
+            clientObject.graph = clientDashboard.find('.type').attr('objdata');
+            clientObject.id            = clientDashboard.attr('id').slice(-1);
+            clientObject.dimension     = clientDashboard.find('.campo').attr('objdata');
+            clientObject.value         = clientDashboard.find('.value').attr('objdata');
+            clientObject.value_sabre   = clientDashboard.find('.sine').attr('value-sabre');
+            clientObject.value_amadeus = clientDashboard.find('.sine').attr('value-amadeus');
+            clientObject.limit         = clientDashboard.find('.limit').val();
+        } catch (err) {
+            alert('Debe elegir un Gráfico.');
+            return false;
+        }
 
-        console.log(clientObject);
+
+        if (validate(clientObject)) {
+            console.log('validado');
+        } else {
+            console.log('no validado');
+        }
     });
 });
+
+function validate (obj) {
+    var error = "";
+
+    if (obj.dimension.length == 0 ) {
+        error += 'Debes setear un Campo. ';
+    }
+
+    if (obj.dimension == 'sine' && (obj.graph == 'pie' || obj.graph == 'col')) {
+        if (typeof obj.value_sabre == 'undefined' ||
+            typeof obj.value_amadeus == 'undefined')
+        {
+            error += 'Debes indicar un agente. ';
+        }
+    }
+
+    if (obj.dimension == 'sine' && obj.graph == 'line') {
+        if (typeof obj.value == 'undefined'){
+            error += 'Debes indicar un agente. ';
+        }
+    }
+
+    if (error) {
+        alert(error);
+        return false;
+    } else {
+        return true;
+    }
+}
