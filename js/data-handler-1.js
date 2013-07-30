@@ -2,19 +2,15 @@ $(document).ready(function () {
     var clientDashboard = {};
     var clientObject    = {};
     var clientGraph     = {};
-    var editModeFlag = false;
     var that, txt, objdata, value_sabre, value_amadeus;
 
     $('.editar').on('click', function(){
-        clientObject    = {};
         $('.tools').slideToggle();
-        clientDashboard = $(this).parent();
-        editModeFlag = true;
     });
 
     // Esta funcion asigna el valor elegido al boton correspondiente
     $('.dropdown-menu li a').on('click', function(){
-        //clientDashboard = $(this).parent().parent().parent().parent();
+        clientDashboard = $(this).parent().parent().parent().parent();
         fieldContainer = $(this).parent().parent().parent();
         that = $(this);
         txt = that.html();
@@ -27,38 +23,17 @@ $(document).ready(function () {
                                                  .attr('value-amadeus',value_amadeus)
                                                  .attr('value-sabre',value_sabre)
                                                  .html(txt);
-            // hago la llamada para traerme los sines disponibles para filtrar
-            // populateSines();
-            // muestro el elemento con los sines
         } else {
             fieldContainer.children('.btn:first').attr('objdata',objdata).html(txt);
         }
-
-        if (objdata == 'limit') {
-            //alert(objdata);
-            clientDashboard.find('.limite').fadeIn();
-        } else {
-            clientDashboard.find('.limite').fadeOut();
-        }
-
-        if (objdata == 'gds') {
-            clientDashboard.find('.gds').fadeIn();
-        } else {
-            clientDashboard.find('.gds').fadeOut();
-        }
+        //clientDashboard = {};
+        clientObject    = {};
     });
 
     // Recolecta los datos de los botones y arma el objeto clientObject para enviar al server
     $('.graficar').on('click', function(){
-        if (!editModeFlag) {
-            alert('Para graficar se debe activar el modo Editar.');
-            return false;
-        }
-
-        console.log(clientDashboard);
-
         try {
-            clientObject.graph         = clientDashboard.find('.type').attr('objdata');
+            clientObject.graph = clientDashboard.find('.type').attr('objdata');
             clientObject.id            = clientDashboard.attr('id').slice(-1);
             clientObject.dimension     = clientDashboard.find('.campo').attr('objdata');
             clientObject.value         = clientDashboard.find('.value').attr('objdata');
@@ -66,16 +41,13 @@ $(document).ready(function () {
             clientObject.value_amadeus = clientDashboard.find('.sine').attr('value-amadeus');
             clientObject.limit         = clientDashboard.find('.limit').val();
         } catch (err) {
-            alert('Ocurrió un error, configure el grafico nuevamente.');
-            //alert(err);
+            alert('Debe elegir un Gráfico.');
             return false;
         }
 
-        console.log(clientObject);
 
         if (validate(clientObject)) {
             console.log('validado');
-            initGraphs(clientObject);
         } else {
             console.log('no validado');
         }

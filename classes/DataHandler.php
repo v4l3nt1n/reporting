@@ -112,8 +112,7 @@ class DataHandler
             }
 
         } catch(Exception $e) {
-            //$this->db->rollBack();
-            echo($e->getMessage());
+            throw new Exception($e->getMessage(), 1);
         }
 
         $fetchAmadeus = array();
@@ -148,8 +147,7 @@ class DataHandler
             }
 
         } catch(Exception $e) {
-            //$this->db->rollBack();
-            echo($e->getMessage());
+            throw new Exception($e->getMessage(), 1);
         }
 
         $count_amadeus = count($fetchAmadeus);
@@ -273,59 +271,120 @@ class DataHandler
         $fetchAmadeus = array();
         $fetchPieCol = array();
         $sine_token = '';
+        $gds_token = '';
         $i = 0;
 
-        $sql = "SELECT
-            ".$this->actual_obj_dim." AS dimension,
-            COUNT(*) AS count
-            FROM tkts_sabre
-            WHERE descripcion != 'VOID' ";
-            $sql .= "GROUP BY dimension
-            HAVING count > 1
-            ORDER BY count DESC ";
-            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
-                $sql .= "LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
-            }
-
-        try{
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(array(':sine' => $sine_token));
-            
-            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $fetchSabre[$i] = $data;
-                $i++;
-            }
-        } catch(Exception $e) {
-            echo($e->getMessage());
+        if (empty($this->client_obj[$this->actual_obj_key]['filtro_gds']) &&
+            !empty($this->client_obj[$this->actual_obj_key]['limit'])
+           )
+        {
+            $gds_token = "sabre";
+        } else {
+            $gds_token = $this->client_obj[$this->actual_obj_key]['filtro_gds'];
         }
 
-        $sql = "SELECT
-            ".$this->actual_obj_dim." AS dimension,
-            COUNT(DISTINCT tkt) AS count
-            FROM tkts_amadeus
-            WHERE descripcion != 'CANX' 
-            AND descripcion != 'CANN' ";
-            $sql .= "GROUP BY dimension
-            HAVING count > 1
-            ORDER BY count DESC ";
-            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
-                $sql .= "LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
+        if ($gds_token == 'sabre') {
+            $sql = "SELECT
+                ".$this->actual_obj_dim." AS dimension,
+                COUNT(*) AS count
+                FROM tkts_sabre
+                WHERE descripcion != 'VOID' ";
+
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro'])) {
+                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
+                               . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
             }
 
-        try{
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(array(':sine' => $sine_token));
-            
-            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $fetchAmadeus[$i] = $data;
-                $i++;
+            $sql .= "
+                GROUP BY dimension
+                HAVING count > 1 
+                ORDER BY count DESC ";
+
+            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
+                $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
             }
-        } catch(Exception $e) {
-            echo($e->getMessage());
+
+            //echo $sql . "<br>";
+
+            try{
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(array(':sine' => $sine_token));
+                
+                while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    $fetchSabre[$i] = $data;
+                    $i++;
+                }
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage(), 1);
+            }            
         }
+/*
+    echo "<pre>";
+    print_r($this->client_obj);
+    echo "</pre>";
+//*/
+
+        if (empty($this->client_obj[$this->actual_obj_key]['filtro_gds']) &&
+            !empty($this->client_obj[$this->actual_obj_key]['limit'])
+           )
+        {
+            $gds_token = "amadeus";
+        } else {
+            $gds_token = $this->client_obj[$this->actual_obj_key]['filtro_gds'];
+        }
+
+        if ($gds_token == 'amadeus') {
+            $sql = "SELECT
+                ".$this->actual_obj_dim." AS dimension,
+                COUNT(DISTINCT tkt) AS count
+                FROM tkts_amadeus
+                WHERE descripcion != 'CANX' 
+                AND descripcion != 'CANN' ";
+
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro'])) {
+                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
+                                 . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
+            }
+
+            $sql .= "
+                GROUP BY dimension
+                HAVING count > 1 
+                ORDER BY count DESC ";
+
+            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
+                $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
+            }
+
+            //echo $sql . "<br>";
+
+            try{
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(array(':sine' => $sine_token));
+                
+                while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    $fetchAmadeus[$i] = $data;
+                    $i++;
+                }
+            } catch(Exception $e) {
+                throw new Exception($e->getMessage(), 1);
+            }
+        }
+/*
+        echo "<pre>";
+        print_r($fetchAmadeus);
+        print_r($fetchSabre);
+        echo "</pre>";
+        die();
+//*/
 
         if ($this->actual_obj_dim == 'descripcion') {
             $fetchPieCol = array_merge($fetchSabre,$fetchAmadeus);
+        } elseif (!empty($this->client_obj[$this->actual_obj_key]['filtro_gds'])) {
+            if ($this->client_obj[$this->actual_obj_key]['filtro_gds'] == 'sabre') {
+                $fetchPieCol = array_merge($fetchSabre);
+            } else {
+                $fetchPieCol = array_merge($fetchAmadeus);
+            }
         } else {
             foreach ($fetchSabre as $key => $dataSb) {
                 foreach ($fetchAmadeus as $key => $dataAm) {
@@ -336,14 +395,19 @@ class DataHandler
                         );
                     }
                 }
-            }    
+            }
         }
 
         $graphData['data'] = $fetchPieCol;
         $graphData['dimension'] = $this->actual_obj_dim;
         $graphData['graph'] = ($this->client_obj[$this->actual_obj_key]['graph'] == 'pie') ? 'PieChart' : 'ColumnChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
-
+/*
+        echo "<pre>";
+        print_r($fetchSabre);
+        echo "</pre>";
+        die();
+//*/
         return $graphData;
     }
 }

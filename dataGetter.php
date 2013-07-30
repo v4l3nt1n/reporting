@@ -8,7 +8,13 @@ function classLoader ($pClassName) {
     include(__DIR__ . '\classes\\' . $pClassName . ".php");
 }
 spl_autoload_register("classLoader");
-
+/*
+echo "<pre>";
+print_r($_POST['dataArray']);
+echo "</pre>";
+//*/
+$client_data[] = $_POST['dataArray'];
+/*
 $client_data = array(
     0 => array(
         'graph'         => 'line',
@@ -46,7 +52,6 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'     => '',
     ),
-    //*
     5 => array(
         'graph'     => 'col',
         'id'        => 5,
@@ -56,7 +61,11 @@ $client_data = array(
         'value_amadeus' => 'LB',
         'limit'     => '20',
     ),
-    //*/
 );
+//*/
 
-$graphObjects = new DataHandler($client_data);
+try {
+    $graphObjects = new DataHandler($client_data);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}

@@ -15,7 +15,7 @@
         <script src="//api.tucanotours.com.ar/bs/js/bootstrap.min.js"></script>
         <!-- GCHARTS INIT -->
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
-        <script type="text/javascript" src="js/data-handler.js"></script>
+        <!-- <script type="text/javascript" src="js/data-handler.js"></script> -->
         <!-- GCHARTS END -->
     </head>
     <body>
@@ -31,78 +31,92 @@
             <div class="row-fluid">
                 <!--dashboard5-->
                 <div id="dashboard4" class="span6 dashboard draggable">
-                    <div class="row1">
-                        <div class="btn-group">
-                            <button class="btn btn-mini btn-inverse campo" objdata="">Campo</button>
-                            <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a objdata="sine">Agente</a></li>
-                                <li><a objdata="cia">Compañía</a></li>
-                                <li><a objdata="pcc">PCC</a></li>
-                            </ul>
-                        </div><!--btn campo-->
-                        <div class="btn-group" style="display:none;">
-                            <button class="btn btn-mini btn-success sine" objdata="sine">Elija Agente</button>
-                            <button class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                            </ul>
-                        </div><!--btn agente-->
-                        <div class="btn-group">
-                            <button class="btn btn-mini btn-inverse" objdata="">Dimensión</button>
-                            <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a objdata="pcc">PCC</a></li>
-                                <li><a objdata="limit">Límite</a></li>
-                                <li><a objdata="gds">GDS</a></li>
-                                <li><a objdata="sine">Agente</a></li>
-                            </ul>
-                        </div><!--btn dimension-->
-                        <div class="limite" style="display:none;">
-                            <input objdata="text" class="input-mini limit" placeholder="limite">
-                        </div><!--Limite-->
-                    </div><!--row1-->
-                    <div class="drag">
-                        <i class="icon-move" title="Arrastrar gráfico"></i>
+                    <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+                    <div class="tools" style="display: none;">
+                        <div class="row1">
+                            <div class="btn-group">
+                                <button class="btn btn-mini btn-inverse type" objdata="">Gráfico</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu grafico">
+                                    <li><a objdata="col">Barras</a></li>
+                                    <li><a objdata="pie">Torta</a></li>
+                                </ul>
+                            </div><!--btn grafico-->
+                            <!--
+                            <div class="btn-group agente" style="display:none;">
+                                <button class="btn btn-mini btn-success sine" objdata="sine">Elija Agente</button>
+                                <button class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
+                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
+                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
+                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
+                                </ul>
+                            </div>--> <!--btn agente-->
+                            <div class="btn-group">
+                                <button class="btn btn-mini btn-inverse campo" objdata="">Campo</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a objdata="sine">Agente</a></li>
+                                    <li><a objdata="cia">Compañía</a></li>
+                                    <li><a objdata="pcc">Total Emisiones</a></li>
+                                </ul>
+                            </div><!--btn campo-->
+
+                        </div><!--row1-->
+                        <div class="drag">
+                            <i class="icon-move" title="Arrastrar gráfico"></i>
+                        </div>
+                        <div class="row2">
+                            <div class="btn-group">
+                                <button class="btn btn-mini btn-inverse" objdata="">Dimensión</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a dim="dim" objdata="gds">GDS</a></li>
+                                    <li><a dim="dim" objdata="limit">Límite</a></li>
+                                </ul>
+                            </div><!--btn dimension-->
+                            <div class="limite" style="display:none;">
+                                <input type="text" class="input-mini limit" placeholder="limite">
+                            </div><!--Limite-->
+
+                            <div class="btn-group gds" style="display:none;">
+                                <button class="btn btn-mini btn-success gds_value" objdata="">GDS</button>
+                                <button class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a objdata="sabre">Sabre</a></li>
+                                    <li><a objdata="amadeus">Amadeus</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a objdata="month">Mes</a></li>
+                                    <li><a objdata="year">Año</a></li>
+                                    <li><a objdata="gds">GDS</a></li>
+                                </ul>
+                            </div><!--btn filtro-->
+                        </div><!--row2-->
                     </div>
-                    <div class="row2">
-                        <div class="btn-group">
-                            <button class="btn btn-mini btn-inverse type" objdata="">Gráfico</button>
-                            <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu grafico">
-                                <li><a objdata="line">Líneas</a></li>
-                                <li><a objdata="col">Barras</a></li>
-                                <li><a objdata="pie">Torta</a></li>
-                            </ul>
-                        </div><!--btn grafico-->
-                        <div class="btn-group">
-                            <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
-                            <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a objdata="month">Mes</a></li>
-                                <li><a objdata="year">Año</a></li>
-                                <li><a objdata="gds">GDS</a></li>
-                            </ul>
-                        </div><!--btn filtro-->
-                    </div><!--row2-->
                     <div class="graficar">
                         <button class="btn btn-mini">Graficar</button>
                     </div><!--btn graficar-->
                     <div>
-                        <div id="piecolchart5" class="pie"></div>
+                        <div id="piecolchart4" class="pie"></div>
                     </div>
                 </div>
                 <!--dashboard5-->
@@ -178,10 +192,9 @@
                         <button class="btn btn-mini">Graficar</button>
                     </div><!--btn graficar-->
                     <div>
-                        <div id="piecolchart4" class="pie"></div>
+                        <div id="piecolchart5" class="pie"></div>
                     </div>
                 </div>
-
             </div><!--row-fluid-->
             <div id="dashboard1" class="span12 dashboard draggable">
                 <div class="btn-group">
