@@ -14,13 +14,10 @@ $(document).ready(function () {
     //initGraphs();
     $( ".draggable" ).draggable();
     
+    // boton a eliminar estaba a propositos de testing
     $('#chart').on('click', function(){
         $('.graph').fadeOut();
         initGraphs();
-    });
-
-    $('.draw').on('click', function(){
-        alert('metele');
     });
 
     function initGraphs (clientObject) {
@@ -37,20 +34,27 @@ $(document).ready(function () {
                     graphObject = drawVisualization(data[i],i);
                     if (data[i].graph == 'LineChart') {
                         dashBoards[i].bind(graphObject.control,graphObject.chart);
+                        clearClose();
                         dashBoards[i].draw(dataTables[i]);
                     }
                     if (data[i].graph == 'PieChart' ||
                         data[i].graph == 'ColumnChart'
                         ) {
+                        clearClose();
                         graphObject.chart.draw(graphObject.table,{title: "PieChart"});
                     }
                 }
-                dashBoards = [];
-                dataTables = [];
-                $('.graph').fadeIn();
-                clientObject = {};
             }
         });
+    }
+
+    function clearClose () {
+        editModeFlag = false;
+        dashBoards = [];
+        dataTables = [];
+        //$('.graph').fadeIn();
+        $('.tools').slideUp();
+        clientObject = {};
     }
 
     function drawVisualization(data) {
@@ -222,6 +226,29 @@ $(document).ready(function () {
 
         return graphObject;
     }
+
+    function fetchDates () {
+        $.ajax({
+            type: 'post',
+            data: 'action=fetchDate',
+            cache: false,
+            url: "dataGetter.php",
+            dataType: "json",
+            success: function(data){
+                $('.month-filter').html('');
+                $('.year-filter').html('');
+                
+                for (var i = 0 ; i < data.month.length; i++) {
+                    $('.month-filter').append('<li><a objdata="month">' + data.month[i] + '</a></li>');
+                };
+
+                for (var i = 0 ; i < data.year.length; i++) {
+                    $('.year-filter').append('<li><a objdata="' + data.year[i] + '">' + data.year[i] + '</a></li>');
+                };
+            }
+        });
+    }
+
     $('.editar').on('click', function(){
         clientObject    = {};
         $('.tools').slideToggle();
@@ -229,11 +256,29 @@ $(document).ready(function () {
         editModeFlag = true;
     });
 
+    $('.fetch-date').on('click', function(){
+        fetchDates();
+    });
+
+    // esta funcion asigna el valor del filtro
+    $('.dropdown-submenu').on('click', function(event){
+        that = $(event.target);
+        txt = that.html();
+        objdata = that.attr('objdata');
+        fieldContainer = that.parent().parent().parent().parent().parent();
+        fieldContainer.children('.btn:first').attr('objdata', objdata).html(txt);
+    });
+
     // Esta funcion asigna el valor elegido al boton correspondiente
     $('.dropdown-menu li a').on('click', function(){
-        //clientDashboard = $(this).parent().parent().parent().parent();
-        fieldContainer = $(this).parent().parent().parent();
         that = $(this);
+
+        // si es el filtro de la fecha no asigno el valor, uso otra funcion
+        if (that.attr('id') == "date-filter") {
+            return false;
+        }
+
+        fieldContainer = $(this).parent().parent().parent();
         txt = that.html();
         objdata = that.attr('objdata');
         dim = that.attr('dim');
@@ -289,6 +334,11 @@ $(document).ready(function () {
         }
 
         console.log(clientObject);
+
+        //seteo un limite para cuando traemos la comparecion de los gds
+        if (clientObject.dimension == 'gds' && clientObject.graph != 'line') {
+            clientObject.limit = 3;
+        }
 
         if (validate(clientObject)) {
             console.log('validado');

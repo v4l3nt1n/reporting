@@ -27,13 +27,17 @@ class DataHandler
     // metodos
     function __construct($input)
     {
-        foreach ($input as $key => $clientObject){
-            $this->client_obj[] = $clientObject;
+        if ($input == 'fetchDate') {
+            $dates = $this->fetchDate();
+            echo json_encode($dates);
+            return true;
+        } else {
+            foreach ($input as $key => $clientObject){
+                $this->client_obj[] = $clientObject;
+            }
+            $this->doQuery();
+            echo json_encode($this->graphDataObjects);
         }
-
-        $this->doQuery();
-
-        echo json_encode($this->graphDataObjects);
     }
 
     private function doQuery()
@@ -290,7 +294,9 @@ class DataHandler
                 FROM tkts_sabre
                 WHERE descripcion != 'VOID' ";
 
-            if (!empty($this->client_obj[$this->actual_obj_key]['filtro'])) {
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
+                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
+                ) {
                 $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
                                . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
             }
@@ -341,7 +347,9 @@ class DataHandler
                 WHERE descripcion != 'CANX' 
                 AND descripcion != 'CANN' ";
 
-            if (!empty($this->client_obj[$this->actual_obj_key]['filtro'])) {
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
+                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
+                ) {
                 $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
                                  . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
             }
@@ -385,6 +393,8 @@ class DataHandler
             } else {
                 $fetchPieCol = array_merge($fetchAmadeus);
             }
+        } elseif ($this->actual_obj_dim == 'gds') {
+            $fetchPieCol = array_merge($fetchAmadeus, $fetchSabre);
         } else {
             foreach ($fetchSabre as $key => $dataSb) {
                 foreach ($fetchAmadeus as $key => $dataAm) {
@@ -409,5 +419,37 @@ class DataHandler
         die();
 //*/
         return $graphData;
+    }
+
+    private function fetchDate()
+    {
+        $this->DBHandler();
+        $i = 0;
+        
+        $sql = "SELECT DISTINCT month, year FROM tkts_amadeus
+                UNION
+                SELECT DISTINCT month, year FROM tkts_sabre";
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $rawDates[$i] = $data;
+                $i++;
+            }
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
+
+        foreach ($rawDates as $key => $date) {
+            $dates['month'][] = $date['month'];
+            $dates['year'][] = $date['year'];
+        }
+
+        $dates['month'] = array_unique($dates['month']);
+        $dates['year'] = array_unique($dates['year']);
+
+        return $dates;
     }
 }

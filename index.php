@@ -65,7 +65,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a objdata="sine">Agente</a></li>
                                     <li><a objdata="cia">Compañía</a></li>
-                                    <li><a objdata="pcc">Total Emisiones</a></li>
+                                    <li><a objdata="gds">Total Emisiones</a></li>
                                 </ul>
                             </div><!--btn campo-->
 
@@ -99,15 +99,24 @@
                                 </ul>
                             </div>
 
-                            <div class="btn-group">
+                            <div class="btn-group fetch-date">
                                 <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
                                 <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a objdata="month">Mes</a></li>
-                                    <li><a objdata="year">Año</a></li>
-                                    <li><a objdata="gds">GDS</a></li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Mes</a>
+                                        <ul class="dropdown-menu month-filter">
+                                            <!-- <li><a objdata="year">meses</a></li> -->
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Año</a>
+                                        <ul class="dropdown-menu year-filter">
+                                            <!-- <li><a objdata="year">anios</a></li> -->
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div><!--btn filtro-->
                         </div><!--row2-->

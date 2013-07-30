@@ -8,12 +8,16 @@ function classLoader ($pClassName) {
     include(__DIR__ . '\classes\\' . $pClassName . ".php");
 }
 spl_autoload_register("classLoader");
+
 /*
 echo "<pre>";
-print_r($_POST['dataArray']);
+print_r($_POST);
 echo "</pre>";
+die();
 //*/
-$client_data[] = $_POST['dataArray'];
+
+$action = (!empty($_POST['action'])) ? $_POST['action'] : "";
+
 /*
 $client_data = array(
     0 => array(
@@ -65,7 +69,12 @@ $client_data = array(
 //*/
 
 try {
-    $graphObjects = new DataHandler($client_data);
+    if ($action == 'fetchDate') {
+        $graphObjects = new DataHandler($action);
+    } else {
+        $client_data[] = $_POST['dataArray'];
+        $graphObjects = new DataHandler($client_data);
+    }
 } catch (Exception $e) {
     echo $e->getMessage();
 }
