@@ -582,10 +582,12 @@ class DataHandler
             throw new Exception($e->getMessage(), 1);
         }
 
+        $i = 0;
         foreach ($rawUsers as $key => $user) {
-            $users['usuario'][]      = $user['usuario'];
-            $users['sine_sabre'][]   = $user['sine_sabre'];
-            $users['sine_amadeus'][] = $user['sine_amadeus'];
+            $users[$i]['usuario']      = $user['usuario'];
+            $users[$i]['sine_sabre']   = $user['sine_sabre'];
+            $users[$i]['sine_amadeus'] = $user['sine_amadeus'];
+            $i++;
         }
 
         return $users;

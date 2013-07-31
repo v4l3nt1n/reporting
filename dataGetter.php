@@ -17,6 +17,7 @@ die();
 //*/
 
 $action = (!empty($_POST['action'])) ? $_POST['action'] : "";
+$action = "fetchSine";
 
 /*
 $client_data = array(

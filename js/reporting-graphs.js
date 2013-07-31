@@ -249,6 +249,22 @@ $(document).ready(function () {
         });
     }
 
+    function fetchSines () {
+        $.ajax({
+            type: 'post',
+            data: 'action=fetchSine',
+            cache: false,
+            url: "dataGetter.php",
+            dataType: "json",
+            success: function(data){
+                $('.sine-filter').html('');
+                for (var i = 0 ; i < data.length; i++) {
+                    $('.sine-filter').append('<li><a objdata="month">' + data.month[i] + '</a></li>');
+                };
+            }
+        });
+    }
+
     $('.editar').on('click', function(){
         clientObject    = {};
         $('.tools').slideToggle();
@@ -283,9 +299,10 @@ $(document).ready(function () {
         objdata = that.attr('objdata');
         dim = that.attr('dim');
 
-        if (objdata == 'sine') {
+        if (objdata == 'sine-filter') {
             value_sabre = that.attr('value-sabre');
             value_amadeus = that.attr('value-amadeus');
+            alert(value_sabre);
             fieldContainer.children('.btn:first').attr('objdata',objdata)
                                                  .attr('value-amadeus',value_amadeus)
                                                  .attr('value-sabre',value_sabre)
@@ -317,16 +334,16 @@ $(document).ready(function () {
         console.log(clientDashboard);
 
         try {
-            clientObject.graph             = clientDashboard.find('.type').attr('objdata');
-            clientObject.id                = clientDashboard.attr('id').slice(-1);
-            clientObject.dimension         = clientDashboard.find('.campo').attr('objdata');
-            clientObject.value             = clientDashboard.find('.value').attr('objdata');
-            clientObject.value_sabre       = clientDashboard.find('.sine').attr('value-sabre');
-            clientObject.value_amadeus     = clientDashboard.find('.sine').attr('value-amadeus');
-            clientObject.limit             = clientDashboard.find('.limit').val();
-            clientObject.filtro            = clientDashboard.find('.filtro').attr('objdata');
-            clientObject.filtro_value      = clientDashboard.find('.filtro').html();
-            clientObject.filtro_gds        = clientDashboard.find('.gds_value').attr('objdata');
+            clientObject.graph         = clientDashboard.find('.type').attr('objdata');
+            clientObject.id            = clientDashboard.attr('id').slice(-1);
+            clientObject.dimension     = clientDashboard.find('.campo').attr('objdata');
+            clientObject.value         = clientDashboard.find('.value').attr('objdata');
+            clientObject.value_sabre   = clientDashboard.find('.sine').attr('value-sabre');
+            clientObject.value_amadeus = clientDashboard.find('.sine').attr('value-amadeus');
+            clientObject.limit         = clientDashboard.find('.limit').val();
+            clientObject.filtro        = clientDashboard.find('.filtro').attr('objdata');
+            clientObject.filtro_value  = clientDashboard.find('.filtro').html();
+            clientObject.filtro_gds    = clientDashboard.find('.gds_value').attr('objdata');
         } catch (err) {
             alert('Ocurrió un error, configure el grafico nuevamente.');
             //alert(err);

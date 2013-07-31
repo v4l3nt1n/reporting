@@ -44,19 +44,6 @@
                                     <li><a objdata="pie">Torta</a></li>
                                 </ul>
                             </div><!--btn grafico-->
-                            <!--
-                            <div class="btn-group agente" style="display:none;">
-                                <button class="btn btn-mini btn-success sine" objdata="sine">Elija Agente</button>
-                                <button class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                    <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                </ul>
-                            </div>--> <!--btn agente-->
                             <div class="btn-group">
                                 <button class="btn btn-mini btn-inverse campo" objdata="">Campo</button>
                                 <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -69,7 +56,6 @@
                                     <li><a objdata="gds">Total Emisiones</a></li>
                                 </ul>
                             </div><!--btn campo-->
-
                         </div><!--row1-->
                         <div class="drag">
                             <i class="icon-move" title="Arrastrar gráfico"></i>
@@ -143,18 +129,6 @@
                                 <li><a objdata="pcc">PCC</a></li>
                             </ul>
                         </div><!--btn campo-->
-                        <div class="btn-group" style="display:none;">
-                            <button class="btn btn-mini btn-success sine" objdata="sine">Elija Agente</button>
-                            <button class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                                <li><a objdata="sine" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
-                            </ul>
-                        </div><!--btn agente-->
                         <div class="btn-group">
                             <button class="btn btn-mini btn-inverse" objdata="">Dimensión</button>
                             <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -207,19 +181,32 @@
                 </div>
             </div><!--row-fluid-->
             <div id="dashboard1" class="span12 dashboard draggable">
-                <div class="btn-group">
-                    <button class="btn btn-inverse">Tipo de gráfico</button>
-                    <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Líneas</a></li>
-                        <li><a href="#">Barras</a></li>
-                        <li><a href="#">Torta</a></li>
-                    </ul>
-                </div>
-                <div class="criterio">
-                    <input type="text" placeholder="Criterio de búsqueda"></input>
+                <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+                <div class='toolbar'>
+                    <div class="btn-group">
+                        <button class="btn btn-inverse" >Tipo de Reporte</button>
+                        <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a objdata="emisiones-full" href="#">Total Emisiones</a></li>
+                            <li><a objdata="emisiones-gds" href="#">Total Emisiones x GDS</a></li>
+                            <li><a objdata="emisiones-sine" href="#">Total Emisiones x Sine</a></li>
+                        </ul>
+                    </div>
+                    <div class="criterio">
+                        <input type="text" placeholder="Criterio de búsqueda" style='display: none;'></input>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-success sine" objdata="sine">Elija Agente</button>
+                        <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu sine-filter">
+                            <li><a objdata="sine-filter" value-sabre="SB" value-amadeus="AM">pepe_rino</a></li>
+                            <li><a objdata="sine-filter" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
+                        </ul>
+                    </div><!--btn agente-->
                 </div>
                 <div class="drag">
                     <i class="icon-move" title="Arrastrar gráfico"></i>
