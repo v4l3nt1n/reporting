@@ -46,7 +46,7 @@ class DataHandler
                             tkts_amadeus.gds as GDS
                         FROM tkts_amadeus
                             INNER JOIN codcias
-                                ON tkts_amadeus.cia = codcias.iata_num_code
+                                ON tkts_amadeus.iata_num_code = codcias.iata_num_code
                             INNER JOIN fop_desc
                                 ON tkts_amadeus.fop = fop_desc.fop
                             INNER JOIN tucanoto_api.usuarios
@@ -65,7 +65,7 @@ class DataHandler
                         tkts_sabre.gds as GDS
                     FROM tkts_sabre
                         INNER JOIN codcias
-                            ON tkts_sabre.cia = codcias.iata_num_code
+                            ON tkts_sabre.iata_num_code = codcias.iata_num_code
                         INNER JOIN fop_desc
                             ON tkts_sabre.fop = fop_desc.fop
                         INNER JOIN tucanoto_api.usuarios

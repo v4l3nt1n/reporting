@@ -67,9 +67,19 @@ $client_data = array(
     ),
 );
 //*/
-
+/*
+$client_data[] = array(
+    "graph" => "pie",
+    "id" => 4,
+    "dimension" => "sine",
+    "limit" => 50,
+    "filtro" => '',
+    "filtro_value" => "Filtro",
+    "filtro_gds" => '',
+);
+//*/
 try {
-    if ($action == 'fetchDate') {
+    if ($action) {
         $graphObjects = new DataHandler($action);
     } else {
         $client_data[] = $_POST['dataArray'];

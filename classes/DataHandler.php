@@ -7,6 +7,18 @@ class DataHandler
     const INDICATOR_PIE_GRAPH = 'pie';
     const INDICATOR_LINE_GRAPH = 'line';
 
+    const TKT_DB = 'tucanoto_air';
+    const SINE_DB = 'tucanoto_api';
+
+    const TKT_SABRE_TABLE = 'tkts_sabre';
+    const TKT_AMADEUS_TABLE = 'tkts_amadeus';
+
+    const JOIN_TABLE_CIA = 'codcias';
+    const JOIN_FIELD_CIA = 'Descripcion';
+
+    const JOIN_TABLE_SINE = 'usuarios';
+    const JOIN_FIELD_SINE = 'usuario';
+
     private $dbname = 'tucanoto_air';
     private $host = 'localhost';
     private $db_user = 'root';
@@ -27,7 +39,11 @@ class DataHandler
     // metodos
     function __construct($input)
     {
-        if ($input == 'fetchDate') {
+        if ($input == 'fetchSine') {
+            $sines = $this->fetchSine();
+            echo json_encode($sines);
+            return true;            
+        } elseif ($input == 'fetchDate') {
             $dates = $this->fetchDate();
             echo json_encode($dates);
             return true;
@@ -278,6 +294,21 @@ class DataHandler
         $gds_token = '';
         $i = 0;
 
+        // asigno los valores de las tablas para hacer los joins
+        if ($this->actual_obj_dim == 'sine') {
+            $join_db = DataHandler::SINE_DB;
+            $join_table = DataHandler::JOIN_TABLE_SINE;
+            $join_field = DataHandler::JOIN_FIELD_SINE;
+            $join_dim_field = 'sine_sabre';
+        }
+
+        if ($this->actual_obj_dim == 'iata_num_code') {
+            $join_db = DataHandler::TKT_DB;
+            $join_table = DataHandler::JOIN_TABLE_CIA;
+            $join_field = DataHandler::JOIN_FIELD_CIA;
+            $join_dim_field = 'iata_num_code';
+        }
+
         if (empty($this->client_obj[$this->actual_obj_key]['filtro_gds']) &&
             !empty($this->client_obj[$this->actual_obj_key]['limit'])
            )
@@ -288,6 +319,7 @@ class DataHandler
         }
 
         if ($gds_token == 'sabre') {
+            /*
             $sql = "SELECT
                 ".$this->actual_obj_dim." AS dimension,
                 COUNT(*) AS count
@@ -305,13 +337,37 @@ class DataHandler
                 GROUP BY dimension
                 HAVING count > 1 
                 ORDER BY count DESC ";
-
+//*/                
+/*
             if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
                 $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
             }
+            
+            //*/
+//*
+            $sql = "SELECT ".
+                $join_db.".".$join_table.".".$join_field." AS dimension,
+                COUNT(DISTINCT tkt) AS count
+                FROM ".DataHandler::TKT_DB.".".DataHandler::TKT_SABRE_TABLE.
+                    " INNER JOIN ".$join_db.".".$join_table.
+                        " ON ".
+                        $join_db.".".$join_table.".".$join_dim_field.
+                        "=".
+                        DataHandler::TKT_DB.".".DataHandler::TKT_SABRE_TABLE.".".$this->actual_obj_dim.
+                " WHERE ".DataHandler::TKT_DB.".".DataHandler::TKT_SABRE_TABLE.".descripcion != 'VOID' ";
 
-            //echo $sql . "<br>";
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
+                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
+                ) {
+                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
+                               . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
+            }
 
+            $sql .= "
+                GROUP BY dimension
+                HAVING count > 1 
+                ORDER BY count DESC ";
+//*/
             try{
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array(':sine' => $sine_token));
@@ -328,7 +384,10 @@ class DataHandler
     echo "<pre>";
     print_r($this->client_obj);
     echo "</pre>";
-//*/
+/*/
+        if ($this->actual_obj_dim == 'sine') {
+            $join_dim_field = 'sine_amadeus';
+        }
 
         if (empty($this->client_obj[$this->actual_obj_key]['filtro_gds']) &&
             !empty($this->client_obj[$this->actual_obj_key]['limit'])
@@ -340,6 +399,8 @@ class DataHandler
         }
 
         if ($gds_token == 'amadeus') {
+
+            /*
             $sql = "SELECT
                 ".$this->actual_obj_dim." AS dimension,
                 COUNT(DISTINCT tkt) AS count
@@ -358,14 +419,39 @@ class DataHandler
                 GROUP BY dimension
                 HAVING count > 1 
                 ORDER BY count DESC ";
-
+            /*
             if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
                 $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
             }
+            //*/
+//*
+            $sql = "SELECT ".
+                $join_db.".".$join_table.".".$join_field." AS dimension,
+                COUNT(DISTINCT tkt) AS count
+                FROM ".DataHandler::TKT_DB.".".DataHandler::TKT_AMADEUS_TABLE.
+                    " INNER JOIN ".$join_db.".".$join_table.
+                        " ON ".
+                        $join_db.".".$join_table.".".$join_dim_field.
+                        "=".
+                        DataHandler::TKT_DB.".".DataHandler::TKT_AMADEUS_TABLE.".".$this->actual_obj_dim.
+                " WHERE ".DataHandler::TKT_DB.".".DataHandler::TKT_AMADEUS_TABLE.".descripcion != 'CANX' 
+                  AND ".DataHandler::TKT_DB.".".DataHandler::TKT_AMADEUS_TABLE.".descripcion != 'CANN' ";
+            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
+                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
+                ) {
+                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
+                                 . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
+            }
 
+            $sql .= "
+                GROUP BY dimension
+                HAVING count > 1 
+                ORDER BY count DESC ";
+//*/
             //echo $sql . "<br>";
-
+            //die();
             try{
+                $i = 0;
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array(':sine' => $sine_token));
                 
@@ -408,13 +494,31 @@ class DataHandler
             }
         }
 
+        // ordeno el array de mayor a menor
+        function custom_sort($a,$b) {
+             return $a['count']<$b['count'];
+        }
+        usort($fetchPieCol, "custom_sort");
+
+        if (!empty($this->client_obj[$this->actual_obj_key]['limit'])) {
+            array_splice($fetchPieCol, $this->client_obj[$this->actual_obj_key]['limit']);
+        }
+
         $graphData['data'] = $fetchPieCol;
         $graphData['dimension'] = $this->actual_obj_dim;
         $graphData['graph'] = ($this->client_obj[$this->actual_obj_key]['graph'] == 'pie') ? 'PieChart' : 'ColumnChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
+
+
 /*
         echo "<pre>";
         print_r($fetchSabre);
+        print_r($fetchAmadeus);
+        echo "</pre>";
+
+        
+        echo "<pre>";
+        print_r($fetchPieCol);
         echo "</pre>";
         die();
 //*/
@@ -451,5 +555,39 @@ class DataHandler
         $dates['year'] = array_unique($dates['year']);
 
         return $dates;
+    }
+
+    private function fetchSine()
+    {
+        $this->DBHandler();
+        $i = 0;
+        
+        $sql = "SELECT DISTINCT tucanoto_api.usuarios.usuario,
+                                tucanoto_api.usuarios.sine_sabre,
+                                tucanoto_api.usuarios.sine_amadeus
+                FROM tucanoto_api.usuarios
+                    WHERE tucanoto_api.usuarios.sine_amadeus !=  ''
+                    OR    tucanoto_api.usuarios.sine_sabre !=  ''
+                ORDER BY  tucanoto_api.usuarios.usuario ASC";
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $rawUsers[$i] = $data;
+                $i++;
+            }
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
+
+        foreach ($rawUsers as $key => $user) {
+            $users['usuario'][]      = $user['usuario'];
+            $users['sine_sabre'][]   = $user['sine_sabre'];
+            $users['sine_amadeus'][] = $user['sine_amadeus'];
+        }
+
+        return $users;
     }
 }

@@ -50,8 +50,8 @@ $(document).ready(function () {
 
     function clearClose () {
         editModeFlag = false;
-        dashBoards = [];
-        dataTables = [];
+        dashBoards   = [];
+        dataTables   = [];
         //$('.graph').fadeIn();
         $('.tools').slideUp();
         clientObject = {};

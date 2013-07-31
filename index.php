@@ -64,7 +64,8 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a objdata="sine">Agente</a></li>
-                                    <li><a objdata="cia">Compañía</a></li>
+                                    <!-- <li><a objdata="cia">Compañía</a></li> -->
+                                    <li><a objdata="iata_num_code">Compañía</a></li>
                                     <li><a objdata="gds">Total Emisiones</a></li>
                                 </ul>
                             </div><!--btn campo-->
