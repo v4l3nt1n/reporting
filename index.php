@@ -197,7 +197,6 @@
                         <div id="piecolchart5" class="pie"></div>
                     </div>
                 </div><!--dashboard4-->
-
             </div><!--row-fluid-->
             <div id="dashboard1" class="span12 dashboard draggable">
                 <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
@@ -277,7 +276,6 @@
                     <div id="control2" class="line_small"></div>
                 </div>
             </div> <!--dashboard1-->
-
         </div><!--wrapper-->
     </body>
 </html>
