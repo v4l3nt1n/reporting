@@ -6,10 +6,10 @@ $(document).ready(function () {
     var clientDashboard = {};
     var clientObject    = {};
     var clientGraph     = {};
-    var editModeFlag = false;
+    var editModeFlag    = false;
     var that, txt, objdata, value_sabre, value_amadeus, dim;    
-    var dashBoards = [];
-    var dataTables = [];
+    var dashBoards      = new Array;
+    var dataTables      = [];
     
     //initGraphs();
     $( ".draggable" ).draggable();
@@ -32,10 +32,12 @@ $(document).ready(function () {
                 var graphObject;
                 for(var i = 0; i < l; i++){
                     graphObject = drawVisualization(data[i],i);
+                    console.log(data[i]);
                     if (data[i].graph == 'LineChart') {
-                        dashBoards[i].bind(graphObject.control,graphObject.chart);
+                        //console.log(dashBoards[0]);
+                        graphObject.dashboard.bind(graphObject.control,graphObject.chart);
                         clearClose();
-                        dashBoards[i].draw(dataTables[i]);
+                        graphObject.dashboard.draw(graphObject.dataTbl);
                     }
                     if (data[i].graph == 'PieChart' ||
                         data[i].graph == 'ColumnChart'
@@ -50,11 +52,11 @@ $(document).ready(function () {
 
     function clearClose () {
         editModeFlag = false;
-        dashBoards   = [];
-        dataTables   = [];
+        //dashBoards   = [];
+        //dataTables   = [];
         //$('.graph').fadeIn();
         $('.tools').slideUp();
-        clientObject = {};
+        //clientObject = {};
     }
 
     function drawVisualization(data) {
@@ -133,7 +135,7 @@ $(document).ready(function () {
             }
         });
 
-        if (data.dimension == 'gds' || data.dimension == 'sine') {
+        if (data.dimension == 'emisiones-gds' || data.dimension == 'emisiones-sine') {
             dataTbl.addColumn('date', 'Date');
             dataTbl.addColumn('number', 'Amadeus');
             dataTbl.addColumn('number', 'Sabre');
@@ -161,7 +163,7 @@ $(document).ready(function () {
             }          
         }
 
-        if (data.dimension == 'tkt') {
+        if (data.dimension == 'emisiones-full') {
             dataTbl.addColumn('date', 'Date');
             dataTbl.addColumn('number', 'Tickets');
 
@@ -194,10 +196,12 @@ $(document).ready(function () {
         var graphObject = {};
         graphObject.control = control;
         graphObject.chart   = chart;
-
+        graphObject.dashboard = dashboard;
+        graphObject.dataTbl = dataTbl;
+/*
         dashBoards.push(dashboard);
         dataTables.push(dataTbl);
-
+//*/
         return graphObject;
     }
 
@@ -258,8 +262,9 @@ $(document).ready(function () {
             dataType: "json",
             success: function(data){
                 $('.sine-filter').html('');
+                //alert(data[0].sine_sabre);
                 for (var i = 0 ; i < data.length; i++) {
-                    $('.sine-filter').append('<li><a objdata="month">' + data.month[i] + '</a></li>');
+                    $('.sine-filter').append('<li><a objdata="sine-filter" value-sabre="' + data[i].sine_sabre + '" value-amadeus="' + data[i].sine_sabre + '">' + data[i].usuario + '</a></li>');
                 };
             }
         });
@@ -267,8 +272,9 @@ $(document).ready(function () {
 
     $('.editar').on('click', function(){
         clientObject    = {};
-        $('.tools').slideToggle();
+        $('.tools').slideUp();
         clientDashboard = $(this).parent();
+        clientDashboard.find('.tools').slideToggle();
         editModeFlag = true;
     });
 
@@ -277,12 +283,17 @@ $(document).ready(function () {
     });
 
     // esta funcion asigna el valor del filtro
-    $('.dropdown-submenu').on('click', function(event){
+    $('.dropdown-submenu, .sine-filter').on('click', function(event){
         that = $(event.target);
         txt = that.html();
         objdata = that.attr('objdata');
-        fieldContainer = that.parent().parent().parent().parent().parent();
-        fieldContainer.children('.btn:first').attr('objdata', objdata).html(txt);
+        value_sabre = that.attr('value-sabre');
+        value_amadeus = that.attr('value-amadeus');        
+        fieldContainer = that.parent().parent().parent();
+        fieldContainer.children('.btn:first').attr('objdata', objdata)
+                                             .attr('value-amadeus',value_amadeus)
+                                             .attr('value-sabre',value_sabre)
+                                             .html(txt);
     });
 
     // Esta funcion asigna el valor elegido al boton correspondiente
@@ -298,7 +309,7 @@ $(document).ready(function () {
         txt = that.html();
         objdata = that.attr('objdata');
         dim = that.attr('dim');
-
+/*
         if (objdata == 'sine-filter') {
             value_sabre = that.attr('value-sabre');
             value_amadeus = that.attr('value-amadeus');
@@ -307,9 +318,9 @@ $(document).ready(function () {
                                                  .attr('value-amadeus',value_amadeus)
                                                  .attr('value-sabre',value_sabre)
                                                  .html(txt);
-        } else {
+        } else {*/
             fieldContainer.children('.btn:first').attr('objdata',objdata).html(txt);
-        }
+        //}
 
         if (objdata == 'limit' && dim == 'dim') {
             clientDashboard.find('.gds').fadeOut();
@@ -321,6 +332,17 @@ $(document).ready(function () {
             clientDashboard.find('.limite').fadeOut();
             clientDashboard.find('.limit').val('');
             clientDashboard.find('.gds').fadeIn();
+        }
+
+        if (objdata == 'emisiones-sine') {
+            fetchSines();
+            clientDashboard.find('.fetch-sine').fadeIn();
+        }
+
+        if (objdata == 'emisiones-full' ||
+            objdata == 'emisiones-gds'
+           ) {
+            clientDashboard.find('.fetch-sine').fadeOut();
         }
     });
 
@@ -348,6 +370,11 @@ $(document).ready(function () {
             alert('Ocurrió un error, configure el grafico nuevamente.');
             //alert(err);
             return false;
+        }
+
+        // si el graph no esta definido, es porque es un line
+        if (typeof clientObject.graph == 'undefined'){
+            clientObject.graph = 'line';
         }
 
         console.log(clientObject);

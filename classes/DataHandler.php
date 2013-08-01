@@ -34,7 +34,7 @@ class DataHandler
 
     private $actual_obj_key;
     private $actual_obj_dim;
-    private $actual_obj_lim;
+    //private $actual_obj_lim;
 
     // metodos
     function __construct($input)
@@ -63,7 +63,7 @@ class DataHandler
             //variable con la clave del array actual para completar el output con todos los datos
             $this->actual_obj_key = $key;
             $this->actual_obj_dim = $obj['dimension'];
-            $this->actual_obj_lim = $obj['limit'];
+            //$this->actual_obj_lim = ($obj['limit']) ? $obj['limit'] : '';
 
             if ($obj['graph'] == DataHandler::INDICATOR_COLUMN_GRAPH ||
                 $obj['graph'] == DataHandler::INDICATOR_PIE_GRAPH) {
@@ -112,7 +112,7 @@ class DataHandler
         year
         FROM tkts_sabre 
         WHERE descripcion != 'VOID' ";
-        if ($this->actual_obj_dim == 'sine') {
+        if ($this->actual_obj_dim == 'emisiones-sine') {
             $sql .= "AND sine =:sine ";
             $sine_token = $this->client_obj[$this->actual_obj_key]['value_sabre'];
         }
@@ -147,7 +147,7 @@ class DataHandler
         FROM tkts_amadeus 
         WHERE descripcion != 'CANX' 
         AND descripcion != 'CANN' ";
-        if ($this->actual_obj_dim == 'sine') {
+        if ($this->actual_obj_dim == 'emisiones-sine') {
             $sql .= "AND sine =:sine ";
             $sine_token = $this->client_obj[$this->actual_obj_key]['value_amadeus'];
         }        
@@ -188,7 +188,7 @@ class DataHandler
         $count = count($mayorFecha);
         $max = 0;
 
-        if ($this->actual_obj_dim == 'gds' || $this->actual_obj_dim == 'sine') {
+        if ($this->actual_obj_dim == 'emisiones-gds' || $this->actual_obj_dim == 'emisiones-sine') {
             for ($i=0; $i < $count ; $i++) {
                 if ($i < $count_sabre && $i > $count_amadeus){
                     $graphData['data'][] = array(
@@ -229,7 +229,7 @@ class DataHandler
             }
         }
 
-        if ($this->actual_obj_dim == 'tkt') {
+        if ($this->actual_obj_dim == 'emisiones-full') {
             for ($i=0; $i < $count ; $i++) {
                 if ($i < $count_sabre && $i > $count_amadeus){
                     $graphData['data'][] = array(

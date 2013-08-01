@@ -17,7 +17,7 @@ die();
 //*/
 
 $action = (!empty($_POST['action'])) ? $_POST['action'] : "";
-$action = "fetchSine";
+//$action = "fetchSine";
 
 /*
 $client_data = array(
@@ -68,22 +68,35 @@ $client_data = array(
     ),
 );
 //*/
-/*
-$client_data[] = array(
-    "graph" => "pie",
-    "id" => 4,
-    "dimension" => "sine",
-    "limit" => 50,
-    "filtro" => '',
-    "filtro_value" => "Filtro",
-    "filtro_gds" => '',
+//*
+$client_data = array(
+    0 => array(
+        "graph" => "pie",
+        "id" => 4,
+        "dimension" => "sine",
+        "limit" => 50,
+        "filtro" => '',
+        "filtro_value" => "Filtro",
+        "filtro_gds" => '',
+    ),
+    1 => array(
+        "graph" => "line",
+        "id" => 1,
+        "dimension" => "emisiones-sine",
+        "limit" => '',
+        "filtro" => 'sine-filter',
+        "filtro_value" => "",
+        "filtro_gds" => '',
+        'value_sabre'   => 'DV',
+        'value_amadeus' => 'DV',        
+    ),
 );
 //*/
 try {
     if ($action) {
         $graphObjects = new DataHandler($action);
     } else {
-        $client_data[] = $_POST['dataArray'];
+        //$client_data[] = $_POST['dataArray'];
         $graphObjects = new DataHandler($client_data);
     }
 } catch (Exception $e) {
