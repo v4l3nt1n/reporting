@@ -9,66 +9,9 @@ function classLoader ($pClassName) {
 }
 spl_autoload_register("classLoader");
 
-/*
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-die();
-//*/
-
 $action = (!empty($_POST['action'])) ? $_POST['action'] : "";
-//$action = "fetchSine";
 
-/*
-$client_data = array(
-    0 => array(
-        'graph'         => 'line',
-        'id'            => 1,
-        'dimension'     => 'sine',
-        'value'         => '',
-        'value_sabre'   => 'LB',
-        'value_amadeus' => 'LB',
-        'limit'         => '',
-    ),
-    1 => array(
-        'graph'     => 'line',
-        'id'        => 2,
-        'dimension' => 'gds',
-        'value'     => '',
-        'value_sabre'   => 'LB',
-        'value_amadeus' => 'LB',
-        'limit'     => '10',
-    ),
-    3 => array(
-        'graph'     => 'line',
-        'id'        => 3,
-        'dimension' => 'tkt',
-        'value'     => '',
-        'value_sabre'   => 'LB',
-        'value_amadeus' => 'LB',
-        'limit'     => '',
-    ),
-    4 => array(
-        'graph'     => 'pie',
-        'id'        => 4,
-        'dimension' => 'descripcion',
-        'value'     => '',
-        'value_sabre'   => 'LB',
-        'value_amadeus' => 'LB',
-        'limit'     => '',
-    ),
-    5 => array(
-        'graph'     => 'col',
-        'id'        => 5,
-        'dimension' => 'sine',
-        'value'     => '',
-        'value_sabre'   => 'LB',
-        'value_amadeus' => 'LB',
-        'limit'     => '20',
-    ),
-);
-//*/
-//*
+/* ARRAY PARA IMPLEMENTAR EL INICIO CON GRAFICOS
 $client_data = array(
     0 => array(
         "graph" => "pie",
@@ -96,9 +39,10 @@ try {
     if ($action) {
         $graphObjects = new DataHandler($action);
     } else {
-        //$client_data[] = $_POST['dataArray'];
+        $client_data[] = $_POST['dataArray'];
         $graphObjects = new DataHandler($client_data);
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $data['error'] = $e->getMessage();
+    echo json_encode($data);
 }

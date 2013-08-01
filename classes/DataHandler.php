@@ -34,7 +34,6 @@ class DataHandler
 
     private $actual_obj_key;
     private $actual_obj_dim;
-    //private $actual_obj_lim;
 
     // metodos
     function __construct($input)
@@ -63,7 +62,6 @@ class DataHandler
             //variable con la clave del array actual para completar el output con todos los datos
             $this->actual_obj_key = $key;
             $this->actual_obj_dim = $obj['dimension'];
-            //$this->actual_obj_lim = ($obj['limit']) ? $obj['limit'] : '';
 
             if ($obj['graph'] == DataHandler::INDICATOR_COLUMN_GRAPH ||
                 $obj['graph'] == DataHandler::INDICATOR_PIE_GRAPH) {
@@ -78,16 +76,12 @@ class DataHandler
     
     private function DBHandler()
     {
-        //$this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
-
         $this->db = new PDO(
             'mysql:host=' . $this->host . ';
              dbname=' . $this->dbname,
              $this->db_user,
              $this->db_psw
         );
-
-        //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
@@ -121,10 +115,8 @@ class DataHandler
         ORDER BY fecha ASC";
 
         try{
-            //$this->db->beginTransaction();
             $stmt = $this->db->prepare($sql);
             $stmt->execute(array(':sine' => $sine_token));
-            //$this->db->commit();
 
             while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $fetchSabre[$i] = $data;
@@ -156,10 +148,8 @@ class DataHandler
         ORDER BY fecha ASC";
 
         try{
-            //$this->db->beginTransaction();
             $stmt = $this->db->prepare($sql);
             $stmt->execute(array(':sine' => $sine_token));
-            //$this->db->commit();
 
             while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $fetchAmadeus[$i] = $data;
@@ -269,14 +259,12 @@ class DataHandler
             }
         }
 
-        //var_dump($max);
-
         // ponemos las opciones que sean necesarias para los graficos
         $graphData['settings']['max'] = $max;
         $graphData['dimension'] = $this->actual_obj_dim;
         $graphData['graph'] = 'LineChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
-        //echo json_encode($graphData);
+
         return $graphData;
     }
 
@@ -319,32 +307,6 @@ class DataHandler
         }
 
         if ($gds_token == 'sabre') {
-            /*
-            $sql = "SELECT
-                ".$this->actual_obj_dim." AS dimension,
-                COUNT(*) AS count
-                FROM tkts_sabre
-                WHERE descripcion != 'VOID' ";
-
-            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
-                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
-                ) {
-                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
-                               . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
-            }
-
-            $sql .= "
-                GROUP BY dimension
-                HAVING count > 1 
-                ORDER BY count DESC ";
-//*/                
-/*
-            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
-                $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
-            }
-            
-            //*/
-//*
             $sql = "SELECT ".
                 $join_db.".".$join_table.".".$join_field." AS dimension,
                 COUNT(DISTINCT tkt) AS count
@@ -367,7 +329,7 @@ class DataHandler
                 GROUP BY dimension
                 HAVING count > 1 
                 ORDER BY count DESC ";
-//*/
+
             try{
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array(':sine' => $sine_token));
@@ -380,11 +342,7 @@ class DataHandler
                 throw new Exception($e->getMessage(), 1);
             }            
         }
-/*
-    echo "<pre>";
-    print_r($this->client_obj);
-    echo "</pre>";
-/*/
+
         if ($this->actual_obj_dim == 'sine') {
             $join_dim_field = 'sine_amadeus';
         }
@@ -399,32 +357,6 @@ class DataHandler
         }
 
         if ($gds_token == 'amadeus') {
-
-            /*
-            $sql = "SELECT
-                ".$this->actual_obj_dim." AS dimension,
-                COUNT(DISTINCT tkt) AS count
-                FROM tkts_amadeus
-                WHERE descripcion != 'CANX' 
-                AND descripcion != 'CANN' ";
-
-            if (!empty($this->client_obj[$this->actual_obj_key]['filtro']) &&
-                $this->client_obj[$this->actual_obj_key]['filtro'] != 'limit'
-                ) {
-                $sql .= "AND " . $this->client_obj[$this->actual_obj_key]['filtro']."='"
-                                 . $this->client_obj[$this->actual_obj_key]['filtro_value']."'";
-            }
-
-            $sql .= "
-                GROUP BY dimension
-                HAVING count > 1 
-                ORDER BY count DESC ";
-            /*
-            if ($this->client_obj[$this->actual_obj_key]['limit'] > 0) {
-                $sql .= " LIMIT 0 , ".$this->client_obj[$this->actual_obj_key]['limit'].";";
-            }
-            //*/
-//*
             $sql = "SELECT ".
                 $join_db.".".$join_table.".".$join_field." AS dimension,
                 COUNT(DISTINCT tkt) AS count
@@ -447,9 +379,7 @@ class DataHandler
                 GROUP BY dimension
                 HAVING count > 1 
                 ORDER BY count DESC ";
-//*/
-            //echo $sql . "<br>";
-            //die();
+
             try{
                 $i = 0;
                 $stmt = $this->db->prepare($sql);
@@ -463,13 +393,6 @@ class DataHandler
                 throw new Exception($e->getMessage(), 1);
             }
         }
-/*
-        echo "<pre>";
-        print_r($fetchAmadeus);
-        print_r($fetchSabre);
-        echo "</pre>";
-        die();
-//*/
 
         if ($this->actual_obj_dim == 'descripcion') {
             $fetchPieCol = array_merge($fetchSabre,$fetchAmadeus);
@@ -509,19 +432,6 @@ class DataHandler
         $graphData['graph'] = ($this->client_obj[$this->actual_obj_key]['graph'] == 'pie') ? 'PieChart' : 'ColumnChart';
         $graphData['id'] = $this->client_obj[$this->actual_obj_key]['id'];
 
-
-/*
-        echo "<pre>";
-        print_r($fetchSabre);
-        print_r($fetchAmadeus);
-        echo "</pre>";
-
-        
-        echo "<pre>";
-        print_r($fetchPieCol);
-        echo "</pre>";
-        die();
-//*/
         return $graphData;
     }
 

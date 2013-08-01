@@ -1,3 +1,4 @@
+// cargo los paquetes de la api de google charts
 google.load('visualization', '1.1', {
     packages: ['corechart', 'controls']
 });
@@ -10,16 +11,13 @@ $(document).ready(function () {
     var that, txt, objdata, value_sabre, value_amadeus, dim;    
     var dashBoards      = new Array;
     var dataTables      = [];
-    
-    //initGraphs();
-    $( ".draggable" ).draggable();
-    
-    // boton a eliminar estaba a propositos de testing
-    $('#chart').on('click', function(){
-        $('.graph').fadeOut();
-        initGraphs();
-    });
 
+    // implementar inicio con graficos
+    //initGraphs();
+
+    $( ".draggable" ).draggable();
+
+    // funcion que trae renderiza los graficos
     function initGraphs (clientObject) {
         $.ajax({
             type: 'post',
@@ -32,9 +30,7 @@ $(document).ready(function () {
                 var graphObject;
                 for(var i = 0; i < l; i++){
                     graphObject = drawVisualization(data[i],i);
-                    console.log(data[i]);
                     if (data[i].graph == 'LineChart') {
-                        //console.log(dashBoards[0]);
                         graphObject.dashboard.bind(graphObject.control,graphObject.chart);
                         clearClose();
                         graphObject.dashboard.draw(graphObject.dataTbl);
@@ -50,15 +46,13 @@ $(document).ready(function () {
         });
     }
 
+    // desactiva el flag de edicion y cierra las herramientas
     function clearClose () {
         editModeFlag = false;
-        //dashBoards   = [];
-        //dataTables   = [];
-        //$('.graph').fadeIn();
         $('.tools').slideUp();
-        //clientObject = {};
     }
 
+    // distribuye los datos segun el grafico para preparar la data
     function drawVisualization(data) {
         if (data.graph == 'LineChart') {
             return prepareLineChart(data);
@@ -67,7 +61,9 @@ $(document).ready(function () {
             return preparePieColChart(data);
         }
     }
-       
+
+    // prepara la data, genera los dashboards, controles y graficos para el grafico de lineas
+    // por tiempo.
     function prepareLineChart(data){
         var dId = 'dashboard' + data.id.toString();
         var dashboard = new google.visualization.Dashboard(document.getElementById(dId));
@@ -198,13 +194,11 @@ $(document).ready(function () {
         graphObject.chart   = chart;
         graphObject.dashboard = dashboard;
         graphObject.dataTbl = dataTbl;
-/*
-        dashBoards.push(dashboard);
-        dataTables.push(dataTbl);
-//*/
+
         return graphObject;
     }
 
+    // prepara la data y los graficos para las Tortas y Columnas
     function preparePieColChart(data){
         var dId = 'piecolchart' + data.id.toString();
         if (data.graph == 'PieChart') {
@@ -231,6 +225,7 @@ $(document).ready(function () {
         return graphObject;
     }
 
+    // traigo las fechas
     function fetchDates () {
         $.ajax({
             type: 'post',
@@ -253,6 +248,7 @@ $(document).ready(function () {
         });
     }
 
+    // traigo los sines
     function fetchSines () {
         $.ajax({
             type: 'post',
@@ -309,18 +305,8 @@ $(document).ready(function () {
         txt = that.html();
         objdata = that.attr('objdata');
         dim = that.attr('dim');
-/*
-        if (objdata == 'sine-filter') {
-            value_sabre = that.attr('value-sabre');
-            value_amadeus = that.attr('value-amadeus');
-            alert(value_sabre);
-            fieldContainer.children('.btn:first').attr('objdata',objdata)
-                                                 .attr('value-amadeus',value_amadeus)
-                                                 .attr('value-sabre',value_sabre)
-                                                 .html(txt);
-        } else {*/
-            fieldContainer.children('.btn:first').attr('objdata',objdata).html(txt);
-        //}
+
+        fieldContainer.children('.btn:first').attr('objdata',objdata).html(txt);
 
         if (objdata == 'limit' && dim == 'dim') {
             clientDashboard.find('.gds').fadeOut();
@@ -353,8 +339,6 @@ $(document).ready(function () {
             return false;
         }
 
-        console.log(clientDashboard);
-
         try {
             clientObject.graph         = clientDashboard.find('.type').attr('objdata');
             clientObject.id            = clientDashboard.attr('id').slice(-1);
@@ -368,7 +352,6 @@ $(document).ready(function () {
             clientObject.filtro_gds    = clientDashboard.find('.gds_value').attr('objdata');
         } catch (err) {
             alert('Ocurrió un error, configure el grafico nuevamente.');
-            //alert(err);
             return false;
         }
 
@@ -377,18 +360,15 @@ $(document).ready(function () {
             clientObject.graph = 'line';
         }
 
-        console.log(clientObject);
-
         //seteo un limite para cuando traemos la comparecion de los gds
         if (clientObject.dimension == 'gds' && clientObject.graph != 'line') {
             clientObject.limit = 3;
         }
 
         if (validate(clientObject)) {
-            console.log('validado');
             initGraphs(clientObject);
         } else {
-            console.log('no validado');
+            alert('Por favor reconfigure el gráfico');
         }
     });
 });

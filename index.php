@@ -15,7 +15,6 @@
         <script src="//api.tucanotours.com.ar/bs/js/bootstrap.min.js"></script>
         <!-- GCHARTS INIT -->
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
-        <!-- <script type="text/javascript" src="js/data-handler.js"></script> -->
         <!-- GCHARTS END -->
     </head>
     <body>
@@ -27,7 +26,6 @@
             </div>
         </div>
         <div id="wrapper">
-            <!-- <button id="chart" class="btn">Chartttttt</button> -->
             <div class="row-fluid">
                 <div id="dashboard4" class="span6 dashboard draggable">
                     <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
