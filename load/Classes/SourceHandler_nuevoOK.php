@@ -275,6 +275,7 @@ class SourceHandler
                 $ticket[SourceHandler::CANN_COL_AMADEUS] == 'TKTT'
                )
             {
+                $ticket['FOP'] = 'EX';
                 $ticket[SourceHandler::CANN_COL_AMADEUS] = SourceHandler::REISSUE_INDICATOR;
                 $this->ready_array_amadeus[$key] = $ticket;
             }
@@ -366,16 +367,12 @@ class SourceHandler
 
     private function DBHandler()
     {
-        //$this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
-
         $this->db = new PDO(
             'mysql:host=' . $this->host . ';
              dbname=' . $this->dbname,
              $this->db_user,
              $this->db_psw
         );
-
-        //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 

@@ -19,6 +19,11 @@ class SourceHandler
 
     const REISSUE_INDICATOR = 'EXCH';
 
+    private $dbname = 'tucanoto_air';
+    private $host = 'localhost';
+    private $db_user = 'root';
+    private $db_psw = '';
+
     private $files_array = array();
 
     private $ready_array_sabre = array();
@@ -149,15 +154,6 @@ class SourceHandler
             if (strpos($name, SourceHandler::SOURCE_AMADEUS) !== FALSE) {
                 $this->xlsToArray($inputFileName, SourceHandler::SOURCE_AMADEUS);
             }
-/*
-            if ($name === 'sabre') {
-                $this->csvToArray($inputFileName);
-            }
-
-            if ($name === 'amadeus') {
-                $this->xlsToArray($inputFileName, $name);
-            }
-*/
         }
     }
 
@@ -180,14 +176,8 @@ class SourceHandler
         // normalizo los datos, por ejemplo reemision
         $this->sabreDataNormalize();
         // inserto los datos en la base
-/*
-echo "<pre>";
-print_r($this->ready_array_sabre);
-echo "</pre>";
-die();
-//*/
         $this->insert_source = SourceHandler::SOURCE_SABRE;
-        $this->insertIntoDB();                
+        $this->insertIntoDB();
     }
 
     private function processAmadeus()
@@ -359,9 +349,13 @@ die();
 
     private function DBHandler()
     {
-        $this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_air','root', '');
-        //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);        
+        $this->db = new PDO(
+            'mysql:host=' . $this->host . ';
+             dbname=' . $this->dbname,
+             $this->db_user,
+             $this->db_psw
+        );
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     private function insertIntoDB()

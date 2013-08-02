@@ -19,6 +19,11 @@ class SourceHandler
 
     const REISSUE_INDICATOR = 'EXCH';
 
+    private $dbname = 'tucanoto_air';
+    private $host = 'localhost';
+    private $db_user = 'root';
+    private $db_psw = '';
+
     private $files_array = array();
 
     private $ready_array_sabre = array();
@@ -60,10 +65,9 @@ class SourceHandler
             'BASE',
             'SIGN',
             'HORA',
-//            'PCC',
+            'PCC',
             'DESCRIPCION',
             'CORTETRF1',
-            'CORTETRF2',
     );
 
     private $keys_choose_sabre = array(
@@ -138,26 +142,16 @@ class SourceHandler
     {
         foreach ($this->files_array as $key => $file) {
             $name = strtolower($file['name']);
-            $name = substr($name,0, strpos($name,'.')-1);
 
             $inputFileName = $file['tmp_name'];
 
             if (strpos($name, SourceHandler::SOURCE_SABRE) !== FALSE) {
                 $this->csvToArray($inputFileName);
-            }
-
-            if (strpos($name, SourceHandler::SOURCE_AMADEUS) !== FALSE) {
+            } elseif (strpos($name, SourceHandler::SOURCE_AMADEUS) !== FALSE) {
                 $this->xlsToArray($inputFileName, SourceHandler::SOURCE_AMADEUS);
+            } else {
+                throw new Exception("Uno de los archivos contiene un nombre invalido", 1);
             }
-/*
-            if ($name === 'sabre') {
-                $this->csvToArray($inputFileName);
-            }
-
-            if ($name === 'amadeus') {
-                $this->xlsToArray($inputFileName, $name);
-            }
-*/
         }
     }
 
@@ -180,14 +174,8 @@ class SourceHandler
         // normalizo los datos, por ejemplo reemision
         $this->sabreDataNormalize();
         // inserto los datos en la base
-/*
-echo "<pre>";
-print_r($this->ready_array_sabre);
-echo "</pre>";
-die();
-//*/
         $this->insert_source = SourceHandler::SOURCE_SABRE;
-        $this->insertIntoDB();                
+        $this->insertIntoDB();
     }
 
     private function processAmadeus()
@@ -197,6 +185,8 @@ die();
         // quito las rows con las cabecereas
         $this->cleaner_source = SourceHandler::SOURCE_AMADEUS;
         $this->rowCleaner();
+        // normalizo los datos, por ejemplo reemision
+        $this->amadeusDataNormalize();
         // inserto los datos en la base
         $this->insert_source = SourceHandler::SOURCE_AMADEUS;
         $this->insertIntoDB();        
@@ -273,9 +263,28 @@ die();
         }
     }
 
+    private function amadeusDataNormalize()
+    {
+        foreach ($this->ready_array_amadeus as $key => $ticket) {
+            // aqui determino cuales tickets son reemisiones y cambio la descripcion para normalizarla
+            // con el listado de sabre
+            if (
+                $ticket['FOP'] != 'CA' &&
+                $ticket['FOP'] != 'CC' &&
+                $ticket['FOP'] != 'MX' &&
+                $ticket[SourceHandler::CANN_COL_AMADEUS] == 'TKTT'
+               )
+            {
+                $ticket['FOP'] = 'EX';
+                $ticket[SourceHandler::CANN_COL_AMADEUS] = SourceHandler::REISSUE_INDICATOR;
+                $this->ready_array_amadeus[$key] = $ticket;
+            }
+        }
+    }
+
     private function rowCleaner()
     {
-        if ($this->cleaner_source == SourceHandler::SOURCE_SABRE) {            
+        if ($this->cleaner_source == SourceHandler::SOURCE_SABRE) {
             foreach ($this->ready_array_sabre as $key => $ticket) {
                 if ($ticket[SourceHandler::FILTER_COL_SABRE] == 'FECHA') {
                     unset($this->ready_array_sabre[$key]);
@@ -286,7 +295,6 @@ die();
                     if (empty($ticket['DESCRIPCION'])) {
                         $ticket['DESCRIPCION'] = 'ISSUE';
                     }
-                    unset($this->ready_array_sabre[$key]['CORTETRF2']);
                     $ticket['day'] = $day;
                     $ticket['month'] = strtoupper($month);
                     $ticket['year'] = '20'. $year;
@@ -359,10 +367,15 @@ die();
 
     private function DBHandler()
     {
-        $this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_air','root', '');
-        //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);        
+        $this->db = new PDO(
+            'mysql:host=' . $this->host . ';
+             dbname=' . $this->dbname,
+             $this->db_user,
+             $this->db_psw
+        );
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
+
 
     private function insertIntoDB()
     {
@@ -408,7 +421,7 @@ die();
                                          ':hora'                   => $ticket['HORA'],
                                          ':descripcion'            => $ticket['DESCRIPCION'],
                                          ':corte_tarifario1'       => $ticket['CORTETRF1'],
-                                         ':pcc'                    => 'BI79',
+                                         ':pcc'                    => $ticket['PCC'],
                                          ':day'                    => $ticket['day'],
                                          ':month'                  => $ticket['month'],
                                          ':year'                   => $ticket['year'],
