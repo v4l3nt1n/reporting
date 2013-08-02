@@ -17,6 +17,8 @@ class SourceHandler
 
     const TICKET_COL_SABRE = 'TICKET';
 
+    const REISSUE_INDICATOR = 'EXCH';
+
     private $files_array = array();
 
     private $ready_array_sabre = array();
@@ -175,7 +177,15 @@ class SourceHandler
         // quito los tickets en conjuncion
         $this->ticket_col = SourceHandler::TICKET_COL_SABRE;
         $this->ready_array_sabre = array_map(array($this,'dismissCnjTkts'), $this->ready_array_sabre);
+        // normalizo los datos, por ejemplo reemision
+        $this->sabreDataNormalize();
         // inserto los datos en la base
+/*
+echo "<pre>";
+print_r($this->ready_array_sabre);
+echo "</pre>";
+die();
+//*/
         $this->insert_source = SourceHandler::SOURCE_SABRE;
         $this->insertIntoDB();                
     }
@@ -241,6 +251,26 @@ class SourceHandler
     {
         $elem[$this->ticket_col] = substr($elem[$this->ticket_col], 0, 10);
         return $elem;
+    }
+
+    private function sabreDataNormalize()
+    {
+        foreach ($this->ready_array_sabre as $key => $ticket) {
+            // aqui le quito la letra inicial a los sines de sabre
+            $ticket['SIGN'] = substr($ticket['SIGN'], 1, 2);
+            // aqui determino cuales tickets son reemisiones y cambio la descripcion para normalizarla
+            // con el listado de amadeus
+            if (
+                strpos($ticket['DESCRIPCION'], 'ADDITIONAL') !== false ||
+                strpos($ticket['DESCRIPCION'], 'EVEN EXCH')  !== false ||
+                $ticket['FOP'] == 'EX'
+               )
+            {
+                $ticket['DESCRIPCION'] = SourceHandler::REISSUE_INDICATOR;
+            }
+
+            $this->ready_array_sabre[$key] = $ticket;
+        }
     }
 
     private function rowCleaner()
@@ -329,8 +359,8 @@ class SourceHandler
 
     private function DBHandler()
     {
-        //$this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_reservas','root', '');
-        $this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
+        $this->db = new PDO('mysql:host=127.0.0.1;dbname=tucanoto_air','root', '');
+        //$this->db = new PDO('mysql:host=localhost;dbname=tucanoto_reservas','root', 'csidnrpa');
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);        
     }
 
