@@ -3,10 +3,15 @@ ini_set('display_errors', 1);
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', 60); //300 seconds = 5 minutes
 error_reporting(E_ALL);
-
+/*
 function classLoader ($pClassName) {
     include(__DIR__ . '\classes\\' . $pClassName . ".php");
 }
+*/
+function classLoader ($pClassName) {
+    include(__DIR__ . '/classes/' . $pClassName . ".php");
+}
+
 spl_autoload_register("classLoader");
 
 $action = (!empty($_POST['action'])) ? $_POST['action'] : "";
