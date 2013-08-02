@@ -27,7 +27,7 @@ class DataHandler
 //*/
 
     private $dbname = 'tucanoto_air';
-    private $host = 'localhost';
+    private $host = 'tucanotours.com.ar';
     private $db_user = 'tucanoto_api';
     private $db_psw = '%hRp?17E-1ru';
 
