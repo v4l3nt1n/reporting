@@ -19,10 +19,17 @@ class DataHandler
     const JOIN_TABLE_SINE = 'usuarios';
     const JOIN_FIELD_SINE = 'usuario';
 
+/* datos local
     private $dbname = 'tucanoto_air';
     private $host = 'localhost';
     private $db_user = 'root';
     private $db_psw = '';
+//*/
+
+    private $dbname = 'tucanoto_air';
+    private $host = 'localhost';
+    private $db_user = 'tucanoto_api';
+    private $db_psw = '%hRp?17E-1ru';
 
     private $client_obj;
 

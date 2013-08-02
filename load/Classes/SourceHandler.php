@@ -19,10 +19,17 @@ class SourceHandler
 
     const REISSUE_INDICATOR = 'EXCH';
 
+/* datos local
     private $dbname = 'tucanoto_air';
     private $host = 'localhost';
     private $db_user = 'root';
     private $db_psw = '';
+//*/
+
+    private $dbname = 'tucanoto_air';
+    private $host = 'localhost';
+    private $db_user = 'tucanoto_api';
+    private $db_psw = '%hRp?17E-1ru';
 
     private $files_array = array();
 
