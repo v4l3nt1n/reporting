@@ -49,6 +49,7 @@ $(document).ready(function () {
     // desactiva el flag de edicion y cierra las herramientas
     function clearClose () {
         editModeFlag = false;
+        $('.editar').attr('open','');
         $('.tools').slideUp();
     }
 
@@ -272,10 +273,17 @@ $(document).ready(function () {
 
     $('.editar').on('click', function(){
         clientObject    = {};
-        $('.tools').slideUp();
-        clientDashboard = $(this).parent();
-        clientDashboard.find('.tools').slideToggle();
+        clientDashboard = $(this).parent().parent();
         editModeFlag = true;
+        $('.tools').slideUp();
+
+        if($(this).attr('open') == 'open'){
+            $('.editar').removeAttr('open');
+            clientDashboard.find('.tools').slideUp();
+        } else {
+            $(this).attr('open','open');
+            clientDashboard.find('.tools').slideDown();
+        }
     });
 
     $('.fetch-filters').on('click', function(){
