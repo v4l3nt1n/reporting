@@ -63,6 +63,16 @@ body {
 	background-color: #ffffff;
 }
 
+.row0 {
+	width: 460px;
+	height: 25px;
+}
+
+.row00 {
+	width: 940px;
+	height: 25px;
+}
+
 .row1 {
 	width: 425px;
 	float: left;
@@ -70,7 +80,9 @@ body {
 }
 
 .row2 {
-	width: 400px;
+	width: 425px;
+	float: left;
+	height: 25px;
 }
 
 .btn-group, .criterio, .limite {
@@ -84,21 +96,23 @@ body {
 	margin-left: 10px;
 }
 
+.editar {
+	margin-left:4px !important;
+	float: left;
+	margin-top: 2px !important;
+}
+
 .graficar {
-	float: right;
+	margin-left: 4px;
+	float: left;
 }
 
 .drag {
-	margin-top: 4px;
 	margin-right: 4px;
 	float: right;
 }
 
-.graficar {
-	margin-top: 7px;
-	margin-right: 4px;
-	float: right;
-}
+
 
 .drag:hover {
 	cursor: pointer;
@@ -106,6 +120,7 @@ body {
 
 input[type="text"] {
 	border: 1px solid #515151 !important;
+	height: 9px !important;
 }
 
 

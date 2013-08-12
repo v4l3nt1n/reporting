@@ -16,6 +16,11 @@
         <!-- GCHARTS INIT -->
         <script type="text/javascript" src="js/reporting-graphs.js"></script>
         <!-- GCHARTS END -->
+        <script>
+        $(function() {
+            $( ".draggable" ).draggable({ handle: ".drag" });
+        });
+        </script>
     </head>
     <body>
         <div id="header">
@@ -28,7 +33,15 @@
         <div id="wrapper">
             <div class="row-fluid">
                 <div id="dashboard4" class="span6 dashboard draggable">
-                    <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+                    <div class="row0">
+                        <button data-toggle="buttons-checkbox" class="btn btn-inverse btn-mini editar">Editar</button>
+                        <div class="graficar">
+                            <button class="btn btn-mini">Graficar</button>
+                        </div><!--btn graficar-->
+                        <div class="drag">
+                            <i class="icon-move" title="Arrastrar gráfico"></i>
+                        </div>
+                    </div>
                     <div class="tools" style="display: none;">
                         <div class="row1">
                             <div class="btn-group">
@@ -54,9 +67,7 @@
                                 </ul>
                             </div><!--btn campo-->
                         </div><!--row1-->
-                        <div class="drag">
-                            <i class="icon-move" title="Arrastrar gráfico"></i>
-                        </div>
+                        
                         <div class="row2">
                             <!--
                             <div class="btn-group">
@@ -134,16 +145,21 @@
                             </div>
 
                         </div><!--row2-->
-                    </div>
-                    <div class="graficar">
-                        <button class="btn btn-mini">Graficar</button>
-                    </div><!--btn graficar-->
+                    </div><!--display:none-->
                     <div>
                         <div id="piecolchart4" class="pie"></div>
                     </div>
                 </div><!--dashboard4-->
                 <div id="dashboard5" class="span6 dashboard draggable">
-                    <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+                    <div class="row0">
+                        <button data-toggle="buttons-checkbox" class="btn btn-inverse btn-mini editar">Editar</button>
+                        <div class="graficar">
+                            <button class="btn btn-mini">Graficar</button>
+                        </div><!--btn graficar-->
+                        <div class="drag">
+                            <i class="icon-move" title="Arrastrar gráfico"></i>
+                        </div>
+                    </div>
                     <div class="tools" style="display: none;">
                         <div class="row1">
                             <div class="btn-group">
@@ -220,16 +236,21 @@
                             </div><!--btn filtro-->
                         </div><!--row2-->
                     </div>
-                    <div class="graficar">
-                        <button class="btn btn-mini">Graficar</button>
-                    </div><!--btn graficar-->
                     <div>
                         <div id="piecolchart5" class="pie"></div>
                     </div>
                 </div><!--dashboard4-->
             </div><!--row-fluid-->
             <div id="dashboard1" class="span12 dashboard draggable">
-                <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+               <div class="row00">
+                    <button data-toggle="buttons-checkbox" class="btn btn-inverse btn-mini editar">Editar</button>
+                    <div class="graficar">
+                        <button class="btn btn-mini">Graficar</button>
+                    </div><!--btn graficar-->
+                    <div class="drag">
+                        <i class="icon-move" title="Arrastrar gráfico"></i>
+                    </div>
+                </div>
                 <div class='tools' style="display:none;">
                     <div class="btn-group">
                         <button class="btn btn-inverse campo" >Tipo de Reporte</button>
@@ -255,12 +276,6 @@
                             <li><a objdata="sine-filter" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
                         </ul>
                     </div><!--btn agente-->
-                </div>
-                <div class="drag">
-                    <i class="icon-move" title="Arrastrar gráfico"></i>
-                </div>
-                <div class="graficar">
-                    <button class="btn btn-mini">Graficar</button>
                 </div>
                 <div class="graph">
                     <div id="chart1" class="line"></div>
@@ -268,7 +283,15 @@
                 </div>
             </div> <!--dashboard1-->
             <div id="dashboard2" class="span12 dashboard draggable">
-                <button data-toggle="buttons-checkbox" class="btn editar">Editar</button>
+                <div class="row00">
+                    <button data-toggle="buttons-checkbox" class="btn btn-inverse btn-mini editar">Editar</button>
+                    <div class="graficar">
+                        <button class="btn btn-mini">Graficar</button>
+                    </div><!--btn graficar-->
+                    <div class="drag">
+                        <i class="icon-move" title="Arrastrar gráfico"></i>
+                    </div>
+                </div>
                 <div class='tools' style="display:none;">
                     <div class="btn-group">
                         <button class="btn btn-inverse campo" >Tipo de Reporte</button>
@@ -294,12 +317,6 @@
                             <li><a objdata="sine-filter" value-sabre="SB" value-amadeus="AM">luis_bernal</a></li>
                         </ul>
                     </div><!--btn agente-->
-                </div>
-                <div class="drag">
-                    <i class="icon-move" title="Arrastrar gráfico"></i>
-                </div>
-                <div class="graficar">
-                    <button class="btn btn-mini">Graficar</button>
                 </div>
                 <div class="graph">
                     <div id="chart2" class="line"></div>
