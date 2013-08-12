@@ -53,6 +53,10 @@ class DataHandler
             $dates = $this->fetchDate();
             echo json_encode($dates);
             return true;
+        } elseif ($input == 'fetchFilters') {
+            $filters = $this->fetchFilters();
+            echo json_encode($filters);
+            return true;
         } else {
             foreach ($input as $key => $clientObject){
                 $this->client_obj[] = $clientObject;
@@ -508,5 +512,88 @@ class DataHandler
         }
 
         return $users;
+    }
+
+    private function fetchGds()
+    {
+        $this->DBHandler();
+        $i = 0;
+        
+        $sql = "SELECT DISTINCT gds FROM tkts_amadeus
+                UNION
+                SELECT DISTINCT gds FROM tkts_sabre";
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $rawGds[$i] = $data;
+                $i++;
+            }
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
+
+        echo "<pre>";
+        print_r($rawGds);
+        echo "</pre>";
+        die();
+        return $rawGds;
+    }
+
+    private function fetchFilters ()
+    {
+        $this->DBHandler();
+        $i = 0;
+        
+        $sql = "SELECT DISTINCT month, year FROM tkts_amadeus
+                UNION
+                SELECT DISTINCT month, year FROM tkts_sabre";
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $rawDates[$i] = $data;
+                $i++;
+            }
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
+
+        foreach ($rawDates as $key => $date) {
+            $dates['month'][] = $date['month'];
+            $dates['year'][] = $date['year'];
+        }
+
+        $dates['month'] = array_unique($dates['month']);
+        $dates['year'] = array_unique($dates['year']);
+
+        $i = 0;
+        
+        $sql = "SELECT DISTINCT gds FROM tkts_amadeus
+                UNION
+                SELECT DISTINCT gds FROM tkts_sabre";
+
+        try{
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            
+            while ($data = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $rawGds[$i] = $data['gds'];
+                $i++;
+            }
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+        }
+
+        $filters = array(
+            'dates' => $dates,
+            'gdss' => $rawGds,
+        );
+
+        return $filters;
     }
 }

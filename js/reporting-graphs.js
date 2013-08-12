@@ -9,7 +9,7 @@ $(document).ready(function () {
     var clientGraph     = {};
     var editModeFlag    = false;
     var that, txt, objdata, value_sabre, value_amadeus, dim;    
-    var dashBoards      = new Array;
+    var dashBoards      = [];
     var dataTables      = [];
 
     // implementar inicio con graficos
@@ -209,7 +209,7 @@ $(document).ready(function () {
             var chart = new google.visualization.ColumnChart(document.getElementById(dId));
         }
 
-        var arrayData = new Array;
+        var arrayData = [];
         arrayData.push([data.dimension.toString(), 'Emisiones']);
 
         for (var i = 0; i < data.data.length; i++) {
@@ -223,29 +223,6 @@ $(document).ready(function () {
         graphObject.table = dataTbl;
 
         return graphObject;
-    }
-
-    // traigo las fechas
-    function fetchDates () {
-        $.ajax({
-            type: 'post',
-            data: 'action=fetchDate',
-            cache: false,
-            url: "dataGetter.php",
-            dataType: "json",
-            success: function(data){
-                $('.month-filter').html('');
-                $('.year-filter').html('');
-                
-                for (var i = 0 ; i < data.month.length; i++) {
-                    $('.month-filter').append('<li><a objdata="month">' + data.month[i] + '</a></li>');
-                };
-
-                for (var i = 0 ; i < data.year.length; i++) {
-                    $('.year-filter').append('<li><a objdata="' + data.year[i] + '">' + data.year[i] + '</a></li>');
-                };
-            }
-        });
     }
 
     // traigo los sines
@@ -266,6 +243,33 @@ $(document).ready(function () {
         });
     }
 
+    function fetchFilters () {
+        $.ajax({
+            type: 'post',
+            data: 'action=fetchFilters',
+            cache: false,
+            url: "dataGetter.php",
+            dataType: "json",
+            success: function(data){
+                $('.month-filter').html('');
+                $('.year-filter').html('');
+                $('.gds-filter').html('');
+
+                for (var i = 0 ; i < data.dates.month.length; i++) {
+                    $('.month-filter').append('<li><a objdata="month">' + data.dates.month[i] + '</a></li>');
+                };
+
+                for (var i = 0 ; i < data.dates.year.length; i++) {
+                    $('.year-filter').append('<li><a objdata="' + data.dates.year[i] + '">' + data.dates.year[i] + '</a></li>');
+                };
+
+                for (var i = 0 ; i < data.gdss.length; i++) {
+                    $('.gds-filter').append('<li><a objdata="gds-filter">' + data.gdss[i] + '</a></li>');
+                };
+            }
+        });
+    }
+
     $('.editar').on('click', function(){
         clientObject    = {};
         $('.tools').slideUp();
@@ -274,8 +278,8 @@ $(document).ready(function () {
         editModeFlag = true;
     });
 
-    $('.fetch-date').on('click', function(){
-        fetchDates();
+    $('.fetch-filters').on('click', function(){
+        fetchFilters();
     });
 
     // esta funcion asigna el valor del filtro

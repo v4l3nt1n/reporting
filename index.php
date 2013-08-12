@@ -58,6 +58,7 @@
                             <i class="icon-move" title="Arrastrar gráfico"></i>
                         </div>
                         <div class="row2">
+                            <!--
                             <div class="btn-group">
                                 <button class="btn btn-mini btn-inverse" objdata="">Dimensión</button>
                                 <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
@@ -68,6 +69,55 @@
                                     <li><a dim="dim" objdata="limit">Límite</a></li>
                                 </ul>
                             </div><!--btn dimension-->
+
+                            <div class="btn-group fetch-filters">
+                                <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Mes</a>
+                                        <ul class="dropdown-menu month-filter"></ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Año</a>
+                                        <ul class="dropdown-menu year-filter"></ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="gds-filter">GDS</a>
+                                        <ul class="dropdown-menu gds-filter"></ul>
+                                    </li>
+                                    <li><a dim="dim" objdata="limit">Límite</a></li>
+                                </ul>
+                            </div><!--btn filtro-->
+
+                            <div class="limite" style="display:none;">
+                                <input type="text" class="input-mini limit" placeholder="limite">
+                            </div><!--Limite-->
+
+                            <div class="btn-group fetch-filters">
+                                <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
+                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Mes</a>
+                                        <ul class="dropdown-menu month-filter"></ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="date-filter">Año</a>
+                                        <ul class="dropdown-menu year-filter"></ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1" id="gds-filter">GDS</a>
+                                        <ul class="dropdown-menu gds-filter"></ul>
+                                    </li>
+                                    <li><a dim="dim" objdata="limit">Límite</a></li>
+                                </ul>
+                            </div><!--btn filtro-->
+
                             <div class="limite" style="display:none;">
                                 <input type="text" class="input-mini limit" placeholder="limite">
                             </div><!--Limite-->
@@ -83,26 +133,6 @@
                                 </ul>
                             </div>
 
-                            <div class="btn-group fetch-date">
-                                <button class="btn btn-mini btn-inverse filtro" objdata="">Filtro</button>
-                                <button class="btn btn-mini btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-submenu">
-                                        <a tabindex="-1" id="date-filter">Mes</a>
-                                        <ul class="dropdown-menu month-filter">
-                                            <!-- <li><a objdata="year">meses</a></li> -->
-                                        </ul>
-                                    </li>
-                                    <li class="dropdown-submenu">
-                                        <a tabindex="-1" id="date-filter">Año</a>
-                                        <ul class="dropdown-menu year-filter">
-                                            <!-- <li><a objdata="year">anios</a></li> -->
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div><!--btn filtro-->
                         </div><!--row2-->
                     </div>
                     <div class="graficar">
