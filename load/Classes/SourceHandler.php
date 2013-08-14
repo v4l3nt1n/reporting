@@ -25,12 +25,12 @@ class SourceHandler
     private $db_user = 'root';
     private $db_psw = '';
 //*/
-
+//*
     private $dbname = 'tucanoto_air';
     private $host = 'tucanotours.com.ar';
     private $db_user = 'tucanoto_api';
     private $db_psw = '%hRp?17E-1ru';
-
+//*/
     private $files_array = array();
 
     private $ready_array_sabre = array();
@@ -149,7 +149,6 @@ class SourceHandler
     {
         foreach ($this->files_array as $key => $file) {
             $name = strtolower($file['name']);
-
             $inputFileName = $file['tmp_name'];
 
             if (strpos($name, SourceHandler::SOURCE_SABRE) !== FALSE) {
@@ -174,7 +173,9 @@ class SourceHandler
         $this->ready_array_sabre = $this->keyAssign($this->ready_array_sabre,$this->keys_array_sabre);
         $this->cleaner_source = SourceHandler::SOURCE_SABRE;
         //chequeo que los archivos se hayan cargado correctamente y no tengan errores de formato
-        $this->checkFiles($this->ready_array_sabre);
+        if (!empty($this->ready_array_sabre)) {
+            $this->checkFiles($this->ready_array_sabre);
+        }
         // quito las rows con las cabecereas
         $this->rowCleaner();
         // quito los tickets en conjuncion
@@ -233,7 +234,7 @@ class SourceHandler
     }
 
     private function checkFiles($array)
-    {
+    {       
         if ($this->cleaner_source === SourceHandler::SOURCE_SABRE) {
             if (!$this->ready_array_sabre[0]) {
                 throw new Exception("El archivo CSV contiene errores. Revise si es necesario regenerarlo.", 1);                
@@ -462,14 +463,18 @@ class SourceHandler
                                          ':gds'                    => strtoupper(SourceHandler::SOURCE_SABRE),
                 ));
             }
-                $this->db->commit();  
+                $this->db->commit();
             } catch(Exception $e) {
                 $this->db->rollBack();
-                echo($e->getMessage());
+                throw new Exception( "No se pudo insertar los registros de Sabre" . $e->getMessage(), 1);
             }
         }
 
         if ($this->insert_source == SourceHandler::SOURCE_AMADEUS) {
+            /*
+            echo count($this->ready_array_amadeus);
+            die();
+            */
             try{
                 $this->db->beginTransaction();
                 $stmt = $this->db->prepare("INSERT INTO tkts_amadeus VALUES (null,:nro_seq,
@@ -515,7 +520,7 @@ class SourceHandler
                 $this->db->commit();
             } catch(Exception $e) {
                 $this->db->rollBack();
-                echo($e->getMessage());
+                throw new Exception( "No se pudo insertar los registros de Amadeus" . $e->getMessage(), 1);
             }            
         }
     }
