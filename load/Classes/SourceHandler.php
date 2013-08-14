@@ -172,8 +172,10 @@ class SourceHandler
     {
         // asigno keys para luego elegirlas
         $this->ready_array_sabre = $this->keyAssign($this->ready_array_sabre,$this->keys_array_sabre);
-        // quito las rows con las cabecereas
         $this->cleaner_source = SourceHandler::SOURCE_SABRE;
+        //chequeo que los archivos se hayan cargado correctamente y no tengan errores de formato
+        $this->checkFiles($this->ready_array_sabre);
+        // quito las rows con las cabecereas
         $this->rowCleaner();
         // quito los tickets en conjuncion
         $this->ticket_col = SourceHandler::TICKET_COL_SABRE;
@@ -225,6 +227,17 @@ class SourceHandler
             $this->ready_array_sabre = array_merge($this->ready_array_sabre, $csvarray);
             # Close the File.
             fclose($handle);
+        } else {
+            throw new Exception("No se pudo procesar el CSV ingresado.", 1);
+        }
+    }
+
+    private function checkFiles($array)
+    {
+        if ($this->cleaner_source === SourceHandler::SOURCE_SABRE) {
+            if (!$this->ready_array_sabre[0]) {
+                throw new Exception("El archivo CSV contiene errores. Revise si es necesario regenerarlo.", 1);                
+            }
         }
     }
 
@@ -316,11 +329,25 @@ class SourceHandler
                 $init_col = trim($ticket[SourceHandler::INIT_COL_AMADEUS]);
                 // valido si el elemento contiene la fecha y la seteo para los
                 // proximos elementos a una fecha
+                // este if contempla el formato de fecha 01-Aug
                 if (preg_match('/^\d{1,2}\-[a-zA-Z]{3}$/', $init_col)) {
                     $fecha = explode('-', $init_col);
 
                     $this->aux_day = $fecha[0];
                     $this->aux_month = $fecha[1];
+                    $mes_source = DateTime::createFromFormat('M',$this->aux_month);
+                    $mes_today = new DateTime("now",new DateTimeZone('ART'));
+
+                    if ($mes_source > $mes_today) {
+                        $this->aux_year = date('y') - 1;
+                    } else {
+                        $this->aux_year = date('y');
+                    }
+                // este if contempla el formato de fecha 01Aug
+                } elseif (preg_match('/^\d{1,2}[a-zA-Z]{3}$/', $init_col)) {
+                    $fecha = trim($init_col);
+                    $this->aux_day = substr($fecha, 0, 2);
+                    $this->aux_month = strtoupper(substr($fecha, 2, 3));
                     $mes_source = DateTime::createFromFormat('M',$this->aux_month);
                     $mes_today = new DateTime("now",new DateTimeZone('ART'));
 
