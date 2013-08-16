@@ -45,12 +45,18 @@
 			});
 			var configData = {
 				data: jsonData,
-				columns: ['Year', 'Mes','GDS'],
-				rows: ['Aerolinea'],
+				columns: ['GDS','PCC'],
+				rows: ['Year','Mes'],
 				facts: [{
 					by: 'Ticket',
 					func: 'count'
-				}]
+				}],
+				dimensions: {
+					'Dia': {
+					    type: 'number',
+					    sort: 'asc'
+					}
+				}
 			};
 
 			$('#jqpivot').jqpivot(configData);
